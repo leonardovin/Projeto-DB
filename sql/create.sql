@@ -1,7 +1,5 @@
-\c projeto_db
-
-CREATE TABLE Usuario (
-  CPF VARCHAR(11) PRIMARY KEY,
+CREATE TABLE usuario (
+  cpf VARCHAR(11) PRIMARY KEY,
   nome VARCHAR(255) NOT NULL,
   email VARCHAR(255) NOT NULL,
   senha VARCHAR(255) NOT NULL,
@@ -22,52 +20,57 @@ CREATE TABLE Usuario (
   data_ultima_edicao TIMESTAMP
 );
 
-CREATE TABLE Aluno (
-  usuario VARCHAR(11) PRIMARY KEY REFERENCES Usuario(CPF),
+CREATE TABLE aluno (
+  usuario VARCHAR(11) PRIMARY KEY REFERENCES usuario(cpf),
   assinante BOOLEAN NOT NULL
 );
 
-CREATE TABLE Interesse (
-  aluno VARCHAR(11) REFERENCES Aluno(usuario),
-  interesse VARCHAR(255) NOT NULL
+CREATE TABLE interesse (
+  aluno VARCHAR(11) REFERENCES aluno(usuario),
+  interesse VARCHAR(255) NOT NULL,
+  PRIMARY KEY (aluno, interesse)
 );
 
-CREATE TABLE Administrador (
-  usuario VARCHAR(11) PRIMARY KEY REFERENCES Usuario(CPF),
+CREATE TABLE administrador (
+  usuario VARCHAR(11) PRIMARY KEY REFERENCES usuario(cpf),
   nivel_acesso INTEGER NOT NULL
 );
 
-CREATE TABLE AdministradorAtividade (
-  administrador VARCHAR(11) REFERENCES Administrador(usuario),
+CREATE TABLE administrador_atividade (
+  administrador VARCHAR(11) REFERENCES administrador(usuario),
   log TEXT,
-  data_hora TIMESTAMP NOT NULL
+  data_hora TIMESTAMP NOT NULL,
+  PRIMARY KEY (administrador, data_hora)
 );
 
-CREATE TABLE Tutor (
-  usuario VARCHAR(11) PRIMARY KEY REFERENCES Usuario(CPF),
+CREATE TABLE tutor (
+  usuario VARCHAR(11) PRIMARY KEY REFERENCES usuario(cpf),
   tipo VARCHAR(255) NOT NULL,
-  cadastrado_por VARCHAR(11) REFERENCES Administrador(usuario)
+  cadastrado_por VARCHAR(11) REFERENCES administrador(usuario)
 );
 
-CREATE TABLE TutorHabilidade (
-  tutor VARCHAR(11) REFERENCES Tutor(usuario),
-  habilidade VARCHAR(255) NOT NULL
+CREATE TABLE tutor_habilidade (
+  tutor VARCHAR(11) REFERENCES tutor(usuario),
+  habilidade VARCHAR(255) NOT NULL,
+  PRIMARY KEY (tutor, habilidade)
 );
 
-CREATE TABLE TutorAvaliacao (
-  tutor VARCHAR(11) REFERENCES Tutor(usuario),
-  aluno VARCHAR(11) REFERENCES Aluno(usuario),
+CREATE TABLE tutor_avaliacao (
+  tutor VARCHAR(11) REFERENCES tutor(usuario),
+  aluno VARCHAR(11) REFERENCES aluno(usuario),
   avaliacao INTEGER NOT NULL,
-  data_hora TIMESTAMP NOT NULL
+  data_hora TIMESTAMP NOT NULL,
+  PRIMARY KEY (tutor, aluno, data_hora)
 );
 
-CREATE TABLE Voluntario (
-  tutor VARCHAR(11) REFERENCES Tutor(usuario),
-  motivacao TEXT
+CREATE TABLE voluntario (
+  tutor VARCHAR(11) REFERENCES tutor(usuario),
+  motivacao TEXT,
+  PRIMARY KEY (tutor)
 );
 
-CREATE TABLE Especialista (
-  tutor VARCHAR(11) REFERENCES Tutor(usuario),
+CREATE TABLE especialista (
+  tutor VARCHAR(11) PRIMARY KEY REFERENCES tutor(usuario),
   taxa DECIMAL(10,2) NOT NULL,
   curriculo_academico TEXT,
   conta_nro_banco VARCHAR(20),
@@ -75,34 +78,72 @@ CREATE TABLE Especialista (
   conta_nro VARCHAR(20)
 );
 
-CREATE TABLE AtividadePraticaResposta (
-  aluno VARCHAR(11) REFERENCES Aluno(usuario),
+CREATE TABLE atividade_pratica_resposta (
+  aluno VARCHAR(11) REFERENCES aluno(usuario),
   questao INTEGER NOT NULL,
-  alternativa VARCHAR(1)
+  alternativa VARCHAR(1),
+  PRIMARY KEY (aluno, questao)
 );
 
-CREATE TABLE Mensagem (
-  aluno1 VARCHAR(11) REFERENCES Aluno(usuario),
-  aluno2 VARCHAR(11) REFERENCES Aluno(usuario),
+CREATE TABLE mensagem (
+  aluno1 VARCHAR(11) REFERENCES aluno(usuario),
+  aluno2 VARCHAR(11) REFERENCES aluno(usuario),
   data_hora TIMESTAMP NOT NULL,
-  conteudo TEXT
+  conteudo TEXT,
+  PRIMARY KEY (aluno1, aluno2, data_hora)
 );
 
-CREATE TABLE Videotutorial (
-  recurso_curso VARCHAR(255) REFERENCES RecursoPago(recurso_curso),
+CREATE TABLE curso (
+  codigo VARCHAR(255) PRIMARY KEY,
+  titulo VARCHAR(255) NOT NULL,
+  categoria VARCHAR(255),
+  descricao TEXT,
+  nivel_dificuldade INTEGER,
+  media_aval DECIMAL(2,1),
+  criado_por VARCHAR(11) REFERENCES administrador(usuario)
+);
+
+CREATE TABLE recurso (
+  curso VARCHAR(255) PRIMARY KEY REFERENCES curso(codigo),
+  nome VARCHAR(255),
+  descricao TEXT,
+  tipo VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE recurso_pago (
+  recurso_curso VARCHAR(255),
   recurso_nome VARCHAR(255),
-  duracao INTERVAL NOT NULL
+  preco_unico DECIMAL(10,2) NOT NULL,
+  tipo VARCHAR(255) NOT NULL,
+  PRIMARY KEY (recurso_curso),
+  FOREIGN KEY (recurso_curso) REFERENCES recurso(curso)
 );
 
-CREATE TABLE Guia (
-  recurso_curso VARCHAR(255) REFERENCES RecursoPago(recurso_curso),
+CREATE TABLE videotutorial (
+  recurso_curso VARCHAR(255) REFERENCES recurso_pago(recurso_curso),
   recurso_nome VARCHAR(255),
-  formato VARCHAR(255) NOT NULL
+  duracao INTERVAL NOT NULL,
+  PRIMARY KEY (recurso_curso)
 );
 
-CREATE TABLE Questao (
+CREATE TABLE guia (
+  recurso_curso VARCHAR(255) REFERENCES recurso_pago(recurso_curso),
+  recurso_nome VARCHAR(255),
+  formato VARCHAR(255) NOT NULL,
+  PRIMARY KEY (recurso_curso)
+);
+
+CREATE TABLE atividade_pratica (
+  recurso_pago_curso VARCHAR(255) REFERENCES recurso_pago(recurso_curso),
+  recurso_pago_nome VARCHAR(255),
+  duracao INTERVAL,
+  assunto VARCHAR(255) NOT NULL,
+  PRIMARY KEY (recurso_pago_curso)
+);
+
+CREATE TABLE questao (
   id SERIAL PRIMARY KEY,
-  atividade_pratica_curso VARCHAR(255) REFERENCES AtividadePratica(recurso_pago_curso),
+  atividade_pratica_curso VARCHAR(255) REFERENCES atividade_pratica(recurso_pago_curso),
   atividade_pratica_nome VARCHAR(255),
   nro INTEGER NOT NULL,
   pergunta TEXT NOT NULL,
@@ -113,72 +154,52 @@ CREATE TABLE Questao (
   alt_correta VARCHAR(1) NOT NULL
 );
 
-CREATE TABLE AtividadePratica (
-  recurso_pago_curso VARCHAR(255) REFERENCES RecursoPago(recurso_curso),
+CREATE TABLE tutoria_personalizada (
+  recurso_pago_curso VARCHAR(255) REFERENCES recurso_pago(recurso_curso),
   recurso_pago_nome VARCHAR(255),
-  duracao INTERVAL,
-  assunto VARCHAR(255) NOT NULL
+  assunto VARCHAR(255) NOT NULL,
+  PRIMARY KEY (recurso_pago_curso)
 );
 
-CREATE TABLE Agendamento (
-  aluno VARCHAR(11) REFERENCES Aluno(usuario),
-  especialista VARCHAR(11) REFERENCES Especialista(tutor),
+
+CREATE TABLE agendamento (
+  aluno VARCHAR(11) REFERENCES aluno(usuario),
+  especialista VARCHAR(11),
   data_hora TIMESTAMP NOT NULL,
-  tutoria_personalizada_curso VARCHAR(255) REFERENCES TutoriaPersonalizada(recurso_pago_curso),
-  tutoria_personalizada_nome VARCHAR(255)
+  tutoria_personalizada_curso VARCHAR(255),
+  tutoria_personalizada_nome VARCHAR(255),
+  FOREIGN KEY (especialista) REFERENCES especialista(tutor),
+  FOREIGN KEY (tutoria_personalizada_curso, tutoria_personalizada_nome) REFERENCES tutoria_personalizada(recurso_pago_curso, recurso_pago_nome),
+  PRIMARY KEY (aluno, especialista, data_hora)
 );
 
-CREATE TABLE TutoriaPersonalizada (
-  recurso_pago_curso VARCHAR(255) REFERENCES RecursoPago(recurso_curso),
+
+
+CREATE TABLE aluno_acesso_recurso_pago (
+  aluno VARCHAR(11) REFERENCES aluno(usuario),
+  recurso_pago_curso VARCHAR(255) REFERENCES recurso_pago(recurso_curso),
   recurso_pago_nome VARCHAR(255),
-  assunto VARCHAR(255) NOT NULL
+  PRIMARY KEY (aluno, recurso_pago_curso)
 );
 
-CREATE TABLE AlunoAcessoRecursoPago (
-  aluno VARCHAR(11) REFERENCES Aluno(usuario),
-  recurso_pago_curso VARCHAR(255) REFERENCES RecursoPago(recurso_curso),
-  recurso_pago_nome VARCHAR(255)
-);
-
-CREATE TABLE RecursoPago (
-  recurso_curso VARCHAR(255) REFERENCES Recurso(curso),
+CREATE TABLE administra_recurso (
+  recurso_curso VARCHAR(255) REFERENCES recurso(curso),
   recurso_nome VARCHAR(255),
-  preco_unico DECIMAL(10,2) NOT NULL,
-  tipo VARCHAR(255) NOT NULL
+  especialista VARCHAR(11) REFERENCES especialista(tutor),
+  PRIMARY KEY (recurso_curso)
 );
 
-CREATE TABLE AdministraRecurso (
-  recurso_curso VARCHAR(255) REFERENCES Recurso(curso),
-  recurso_nome VARCHAR(255),
-  especialista VARCHAR(11) REFERENCES Especialista(tutor)
-);
-
-CREATE TABLE Recurso (
-  curso VARCHAR(255) REFERENCES Curso(codigo),
-  nome VARCHAR(255),
-  descricao TEXT,
-  tipo VARCHAR(255) NOT NULL
-);
-
-CREATE TABLE AlunoCursa (
-  aluno VARCHAR(11) REFERENCES Aluno(usuario),
-  curso VARCHAR(255) REFERENCES Curso(codigo),
+CREATE TABLE aluno_cursa (
+  aluno VARCHAR(11) REFERENCES aluno(usuario),
+  curso VARCHAR(255) REFERENCES curso(codigo),
   avaliacao INTEGER,
   nota INTEGER,
-  data_hora TIMESTAMP NOT NULL
+  data_hora TIMESTAMP NOT NULL,
+  PRIMARY KEY (aluno, curso)
 );
 
-CREATE TABLE Tutoria (
-  curso VARCHAR(255) REFERENCES Curso(codigo),
-  voluntario VARCHAR(11) REFERENCES Tutor(usuario)
-);
-
-CREATE TABLE Curso (
-  codigo VARCHAR(255) PRIMARY KEY,
-  titulo VARCHAR(255) NOT NULL,
-  categoria VARCHAR(255),
-  descricao TEXT,
-  nivel_dificuldade INTEGER,
-  media_aval DECIMAL(2,1),
-  criado_por VARCHAR(11) REFERENCES Administrador(usuario)
+CREATE TABLE tutoria (
+  curso VARCHAR(255) REFERENCES curso(codigo),
+  voluntario VARCHAR(11) REFERENCES tutor(usuario),
+  PRIMARY KEY (curso, voluntario)
 );
