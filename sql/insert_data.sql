@@ -1,3 +1,5 @@
+\c projeto_db
+
 CREATE TABLE Usuario (
   CPF VARCHAR(11) PRIMARY KEY,
   nome VARCHAR(255) NOT NULL,
