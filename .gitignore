@@ -1,4 +1,8 @@
 # ignore pgdata folder
 ./pgdata
 
+# Environment files
+.env
 
+# Byte-compiled files
+__pycache__/
