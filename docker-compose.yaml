@@ -1,10 +1,29 @@
 version: '3'
+
 services:
   db:
     image: postgres
+    container_name: app_db
     restart: always
     ports:
       - 5443:5432
     environment:
-      POSTGRES_PASSWORD: projeto_db
-      POSTGRES_DB: projeto_db
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: "${DB_NAME}"
+    volumes:
+      - ./sql/create.sql:/docker-entrypoint-initdb.d/1.sql
+      - ./sql/insert.sql:/docker-entrypoint-initdb.d/2.sql
+
+  app:
+    depends_on:
+      - db
+    build: .
+    image: app
+    container_name: app
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
