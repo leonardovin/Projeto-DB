@@ -13,7 +13,6 @@ services:
       POSTGRES_DB: "${DB_NAME}"
     volumes:
       - ./sql/create.sql:/docker-entrypoint-initdb.d/1.sql
-      - ./sql/insert.sql:/docker-entrypoint-initdb.d/2.sql
 
   app:
     depends_on:

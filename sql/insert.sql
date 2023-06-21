@@ -1,144 +1,355 @@
-\c projeto_db
-
--- Inserções na tabela "Usuario"
-INSERT INTO Usuario (CPF, nome, email, senha, tipo, data_nasc, endereco, telefone, idioma1, idioma2, url_foto_perfil, cartao_cred_nro, cartao_cred_validade, cartao_cred_cvv, cartao_cred_cpf, cartao_cred_titular, status, data_ultimo_acesso, data_ultima_edicao)
+-- Insert entries for "Usuário" table
+INSERT INTO
+  Usuario (
+    CPF,
+    nome,
+    email,
+    senha,
+    tipo,
+    data_nasc,
+    endereço,
+    telefone,
+    idioma1,
+    idioma2,
+    url_foto_perfil,
+    cartão_cred_nro,
+    cartão_cred_validade,
+    cartão_cred_cvv,
+    cartão_cred_cpf,
+    cartão_cred_titular,
+    status,
+    data_último_acesso,
+    data_última_edição
+  )
 VALUES
-('12345678901', 'João Silva', 'joao.silva@example.com', 'senha123', 'Aluno', '1990-01-01', 'Rua das Flores, 123', '987654321', 'Português', 'Inglês', 'https://example.com/foto.jpg', '1234567890123456', '12/25', '123', '12345678901', 'João Silva', 'Ativo', '2022-06-01 10:00:00', '2022-06-10 15:30:00'),
-('23456789012', 'Maria Santos', 'maria.santos@example.com', 'senha456', 'Tutor', '1985-05-15', 'Avenida dos Anjos, 456', '987654321', 'Português', NULL, 'https://example.com/foto.jpg', NULL, NULL, NULL, NULL, NULL, 'Ativo', '2022-06-02 09:00:00', '2022-06-11 14:45:00');
+  (
+    '12345678901',
+    'John Doe',
+    'johndoe@example.com',
+    'password1',
+    'tipo1',
+    '2000-01-01',
+    '123 Main St',
+    '1234567890',
+    'English',
+    'Spanish',
+    'https://example.com/profile1.jpg',
+    '1234567890123456',
+    '2025-12',
+    '123',
+    '12345678901',
+    'John Doe',
+    'ativo',
+    '2023-06-20',
+    '2023-06-20'
+  );
 
--- Inserções na tabela "Aluno"
-INSERT INTO Aluno (usuario, assinante)
+INSERT INTO
+  Usuario (
+    CPF,
+    nome,
+    email,
+    senha,
+    tipo,
+    data_nasc,
+    endereço,
+    telefone,
+    idioma1,
+    idioma2,
+    url_foto_perfil,
+    cartão_cred_nro,
+    cartão_cred_validade,
+    cartão_cred_cvv,
+    cartão_cred_cpf,
+    cartão_cred_titular,
+    status,
+    data_último_acesso,
+    data_última_edição
+  )
 VALUES
-('12345678901', true),
-('23456789012', true);
+  (
+    '98765432109',
+    'Jane Smith',
+    'janesmith@example.com',
+    'password2',
+    'tipo2',
+    '1995-05-10',
+    '456 Oak St',
+    '9876543210',
+    'French',
+    NULL,
+    'https://example.com/profile2.jpg',
+    '9876543210987654',
+    '2024-09',
+    '456',
+    '98765432109',
+    'Jane Smith',
+    'ativo',
+    '2023-06-19',
+    '2023-06-19'
+  );
 
--- Inserções na tabela "Interesse"
-INSERT INTO Interesse (aluno, interesse)
+-- Insert entries for "Mensagem" table
+INSERT INTO
+  mensagem (
+    Curso,
+    título,
+    categoria,
+    descrição,
+    nível_dificuldade,
+    média_aval,
+    criado_por
+  )
 VALUES
-('12345678901', 'Matemática'),
-('23456789012', 'Inglês');
+  (
+    'curso1',
+    'título1',
+    'categoria1',
+    'descrição1',
+    'fácil',
+    4.5,
+    'usuario1'
+  );
 
--- Inserção na tabela "Administrador"
-INSERT INTO Administrador (usuario, nivel_acesso)
+INSERT INTO
+  mensagem (
+    Curso,
+    título,
+    categoria,
+    descrição,
+    nível_dificuldade,
+    média_aval,
+    criado_por
+  )
 VALUES
-('34567890123', 1);
+  (
+    'curso2',
+    'título2',
+    'categoria2',
+    'descrição2',
+    'médio',
+    3.8,
+    'usuario2'
+  );
 
--- Inserção na tabela "AdministradorAtividade"
-INSERT INTO AdministradorAtividade (administrador, log, data_hora)
+-- Insert entries for "Recurso" table
+INSERT INTO
+  recurso (curso, nome, descrição, tipo)
 VALUES
-('34567890123', 'Atividade realizada', '2022-06-03 08:00:00');
+  ('curso1', 'recurso1', 'descrição1', 'tipo1');
 
--- Inserção na tabela "Tutor"
-INSERT INTO Tutor (usuario, tipo, cadastrado_por)
+INSERT INTO
+  recurso (curso, nome, descrição, tipo)
 VALUES
-('23456789012', 'Tutor', '34567890123');
+  ('curso2', 'recurso2', 'descrição2', 'tipo2');
 
--- Inserção na tabela "TutorHabilidade"
-INSERT INTO TutorHabilidade (tutor, habilidade)
+-- Insert entries for "RecursoPago" table
+INSERT INTO
+  recurso_pago (recurso_curso, recurso_nome, preço_único, tipo)
 VALUES
-('23456789012', 'Matemática');
+  ('curso1', 'recurso1', 10.99, 'tipo1');
 
--- Inserção na tabela "TutorAvaliacao"
-INSERT INTO TutorAvaliacao (tutor, aluno, avaliacao, data_hora)
+INSERT INTO
+  recurso_pago (recurso_curso, recurso_nome, preço_único, tipo)
 VALUES
-('23456789012', '12345678901', 4, '2022-06-04 07:00:00');
+  ('curso2', 'recurso2', 19.99, 'tipo2');
 
--- Inserção na tabela "Voluntario"
-INSERT INTO Voluntario (tutor, motivacao)
+-- Insert entries for "Vídeotutorial" table
+INSERT INTO
+  vídeotutorial (recurso_curso, recurso_nome, duração)
 VALUES
-('23456789012', 'Gosto de ajudar os outros');
+  ('curso1', 'recurso1', '1 hour');
 
--- Inserção na tabela "Especialista"
-INSERT INTO Especialista (tutor, taxa, curriculo_academico, conta_nro_banco, conta_agencia, conta_nro)
+INSERT INTO
+  vídeotutorial (recurso_curso, recurso_nome, duração)
 VALUES
-('23456789012', 50.00, 'Mestrado em Física', '12345678', '001', '987654321');
+  ('curso2', 'recurso2', '45 minutes');
 
--- Inserções na tabela "AtividadePraticaResposta"
-INSERT INTO AtividadePraticaResposta (aluno, questao, alternativa)
+-- Insert entries for "Guia" table
+INSERT INTO
+  guia (recurso_curso, recurso_nome, formato)
 VALUES
-('12345678901', 1, 'A'),
-('12345678901', 2, 'B');
+  ('curso1', 'recurso1', 'PDF');
 
--- Inserções na tabela "Mensagem"
-INSERT INTO Mensagem (aluno1, aluno2, data_hora, conteudo)
+INSERT INTO
+  guia (recurso_curso, recurso_nome, formato)
 VALUES
-('12345678901', '23456789012', '2022-06-05 06:00:00', 'Olá, tudo bem?'),
-('23456789012', '12345678901', '2022-06-05 06:01:00', 'Olá! Estou bem, obrigado!');
+  ('curso2', 'recurso2', 'eBook');
 
--- Inserções na tabela "Videotutorial"
-INSERT INTO Videotutorial (recurso_curso, recurso_nome, duracao)
+-- Insert entries for "AtividadePrática" table
+INSERT INTO
+  atividadeprática (
+    recurso_pago_curso,
+    recurso_pago_nome,
+    duração,
+    assunto
+  )
 VALUES
-('ABC123', 'Introdução à Matemática', '00:30:00'),
-('DEF456', 'Conversação em Inglês', '00:20:00');
+  ('curso1', 'recurso1', '2 hours', 'assunto1');
 
--- Inserções na tabela "Guia"
-INSERT INTO Guia (recurso_curso, recurso_nome, formato)
+INSERT INTO
+  atividadeprática (
+    recurso_pago_curso,
+    recurso_pago_nome,
+    duração,
+    assunto
+  )
 VALUES
-('ABC123', 'Guia de Estudos de Matemática', 'PDF'),
-('DEF456', 'Guia de Vocabulário em Inglês', 'PDF');
+  ('curso2', 'recurso2', '1.5 hours', 'assunto2');
 
--- Inserções na tabela "Questao"
-INSERT INTO Questao (atividade_pratica_curso, atividade_pratica_nome, nro, pergunta, alt1, alt2, alt3, alt4, alt_correta)
+-- Insert entries for "Questão" table
+INSERT INTO
+  questão (
+    id,
+    atividade_prática_curso,
+    atividade_prática_nome,
+    nro,
+    pergunta,
+    alt1,
+    alt2,
+    alt3,
+    alt4,
+    alt_correta
+  )
 VALUES
-('XYZ789', 'Atividade Prática de Física', 1, 'Qual é a fórmula da velocidade média?', 'a) v = d/t', 'b) v = t/d', NULL, NULL, 'a'),
-('XYZ789', 'Atividade Prática de Física', 2, 'Qual é a unidade de medida da força?', 'a) Watt', 'b) Ampère', 'c) Newton', 'd) Joule', 'c');
+  (
+    1,
+    'curso1',
+    'recurso1',
+    1,
+    'pergunta1',
+    'opção1',
+    'opção2',
+    'opção3',
+    'opção4',
+    'opção1'
+  );
 
--- Inserções na tabela "AtividadePratica"
-INSERT INTO AtividadePratica (recurso_pago_curso, recurso_pago_nome, duracao, assunto)
+INSERT INTO
+  questão (
+    id,
+    atividade_prática_curso,
+    atividade_prática_nome,
+    nro,
+    pergunta,
+    alt1,
+    alt2,
+    alt3,
+    alt4,
+    alt_correta
+  )
 VALUES
-('XYZ789', 'Atividade Prática de Física', '01:00:00', 'Cinemática'),
-('LMN012', 'Atividade Prática de Programação', '02:00:00', 'Introdução ao Python');
+  (
+    2,
+    'curso2',
+    'recurso2',
+    1,
+    'pergunta2',
+    'opção1',
+    'opção2',
+    'opção3',
+    'opção4',
+    'opção3'
+  );
 
--- Inserções na tabela "Agendamento"
-INSERT INTO Agendamento (aluno, especialista, data_hora, tutoria_personalizada_curso, tutoria_personalizada_nome)
+-- Insert entries for "TutoriaPersonalizada" table
+INSERT INTO
+  tutoriapersonalizada (recurso_pago_curso, recurso_pago_nome, assunto)
 VALUES
-('12345678901', '23456789012', '2022-06-06 05:00:00', 'TUV345', 'Tutoria Personalizada de Matemática'),
-('12345678901', '23456789012', '2022-06-07 10:00:00', 'TUV345', 'Tutoria Personalizada de Matemática');
+  ('curso1', 'recurso1', 'assunto1');
 
--- Inserções na tabela "TutoriaPersonalizada"
-INSERT INTO TutoriaPersonalizada (recurso_pago_curso, recurso_pago_nome, assunto)
+INSERT INTO
+  tutoriapersonalizada (recurso_pago_curso, recurso_pago_nome, assunto)
 VALUES
-('TUV345', 'Tutoria Personalizada de Matemática', 'Álgebra Linear'),
-('TUV345', 'Tutoria Personalizada de Matemática', 'Cálculo Diferencial');
+  ('curso2', 'recurso2', 'assunto2');
 
--- Inserções na tabela "AlunoAcessoRecursoPago"
-INSERT INTO AlunoAcessoRecursoPago (aluno, recurso_pago_curso, recurso_pago_nome)
+-- Insert entries for "Agendamento" table
+INSERT INTO
+  agendamento (
+    aluno,
+    especialista,
+    data_hora,
+    tutoria_personalizada_curso,
+    tutoria_personalizada_nome
+  )
 VALUES
-('12345678901', 'XYZ789', 'Atividade Prática de Física'),
-('12345678901', 'LMN012', 'Atividade Prática de Programação');
+  (
+    'usuario1',
+    'especialista1',
+    '2023-06-21 10:00:00',
+    'curso1',
+    'recurso1'
+  );
 
--- Inserções na tabela "RecursoPago"
-INSERT INTO RecursoPago (recurso_curso, recurso_nome, preco_unico, tipo)
+INSERT INTO
+  agendamento (
+    aluno,
+    especialista,
+    data_hora,
+    tutoria_personalizada_curso,
+    tutoria_personalizada_nome
+  )
 VALUES
-('XYZ789', 'Atividade Prática de Física', 29.99, 'Atividade Prática'),
-('LMN012', 'Atividade Prática de Programação', 39.99, 'Atividade Prática');
+  (
+    'usuario2',
+    'especialista2',
+    '2023-06-21 11:00:00',
+    'curso2',
+    'recurso2'
+  );
 
--- Inserções na tabela "AdministraRecurso"
-INSERT INTO AdministraRecurso (recurso_curso, recurso_nome, especialista)
+-- Insert entries for "AlunoAcessoRecursoPago" table
+INSERT INTO
+  aluno_acesso_recurso_pago (aluno, recurso_pago_curso, recurso_pago_nome)
 VALUES
-('XYZ789', 'Atividade Prática de Física', '23456789012'),
-('LMN012', 'Atividade Prática de Programação', '23456789012');
+  ('usuario1', 'curso1', 'recurso1');
 
--- Inserções na tabela "Recurso"
-INSERT INTO Recurso (curso, nome, descricao, tipo)
+INSERT INTO
+  aluno_acesso_recurso_pago (aluno, recurso_pago_curso, recurso_pago_nome)
 VALUES
-('ABC123', 'Matemática Básica', 'Curso introdutório de matemática', 'Curso'),
-('DEF456', 'Inglês Intermediário', 'Curso de conversação em inglês', 'Curso');
+  ('usuario2', 'curso2', 'recurso2');
 
--- Inserções na tabela "AlunoCursa"
-INSERT INTO AlunoCursa (aluno, curso, avaliacao, nota, data_hora)
+-- Insert entries for "AdministraRecurso" table
+INSERT INTO
+  administra_recurso (recurso_curso, recurso_nome, especialista)
 VALUES
-('12345678901', 'ABC123', 4, 80, '2022-06-08 04:00:00'),
-('12345678901', 'DEF456', 5, 95, '2022-06-09 11:00:00');
+  ('curso1', 'recurso1', 'especialista1');
 
--- Inserções na tabela "Tutoria"
-INSERT INTO Tutoria (curso, voluntario)
+INSERT INTO
+  administra_recurso (recurso_curso, recurso_nome, especialista)
 VALUES
-('ABC123', '23456789012'),
-('DEF456', '23456789012');
+  ('curso2', 'recurso2', 'especialista2');
 
--- Inserção na tabela "Curso"
-INSERT INTO Curso (codigo, titulo, categoria, descricao, nivel_dificuldade, media_aval, criado_por)
+-- Insert entries for "AlunoCursa" table
+INSERT INTO
+  aluno_cursa (aluno, curso, avaliação, nota, data_hora)
 VALUES
-('ABC123', 'Matemática Básica', 'Matemática', 'Curso introdutório de matemática', 1, 4.5, '34567890123'),
-('DEF456', 'Inglês Intermediário', 'Idiomas', 'Curso de conversação em inglês', 2, 4.8, '34567890123');
+  (
+    'usuario1',
+    'curso1',
+    'avaliação1',
+    4.5,
+    '2023-06-20 14:00:00'
+  );
+
+INSERT INTO
+  aluno_cursa (aluno, curso, avaliação, nota, data_hora)
+VALUES
+  (
+    'usuario2',
+    'curso2',
+    'avaliação2',
+    3.8,
+    '2023-06-19 15:00:00'
+  );
+
+-- Insert entries for "Tutoria" table
+INSERT INTO
+  tutoria (curso, voluntário)
+VALUES
+  ('curso1', 'tutor1');
+
+INSERT INTO
+  tutoria (curso, voluntário)
+VALUES
+  ('curso2', 'tutor2');
