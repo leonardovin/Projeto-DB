@@ -4,9 +4,23 @@ from datetime import datetime
 
 def list(connection, cursor):
     try:
-        cursor.execute('SELECT * FROM Curso')
+        query = 'SELECT * FROM curso'
+        cursor.execute(query)
         connection.commit()
         print('Cursos:')
+        print(from_db_cursor(cursor))
+    except Exception as e:
+        connection.rollback()
+        print(e)
+
+def list_students(connection, cursor, course):
+    try:
+        query = 'SELECT * FROM aluno_cursa AC JOIN aluno A ON AC.aluno = A.usuario WHERE curso = %s'
+        print(course)
+        print(query)
+        cursor.execute(query, (course,))
+        connection.commit()
+        print(f'Alunos do curso {course}:')
         print(from_db_cursor(cursor))
     except Exception as e:
         connection.rollback()

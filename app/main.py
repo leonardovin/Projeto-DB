@@ -19,10 +19,11 @@ def menu():
     match option:
         case '1':
             courses.list(connection, cursor)
+        case '2':
+            students.list(connection, cursor)
         case '3':
-            # course = input()
-            # courses.list_students(connection, cursor, course)
-            raise NotImplementedError()
+            course = input('Insira a sigla do curso: ')
+            courses.list_students(connection, cursor, course)
         case '5':
             student = input('Insira o CPF do aluno: ')
             course = input('Insira a sigla do curso: ')
@@ -75,7 +76,7 @@ def menu():
                     courses.list(connection, cursor)
 
                 course = input('Insira a sigla do curso: ')
-                courses.insert_student(connection, cursor, course, student)
+                courses.insert_student(connection, cursor, course, student['cpf'])
 
         case 'q':
             db.close(cursor, connection)
