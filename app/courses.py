@@ -8,8 +8,12 @@ def list(connection, cursor):
         query = 'SELECT * FROM curso'
         cursor.execute(query)
         connection.commit()
-        print('Cursos:')
-        print(from_db_cursor(cursor))
+
+        if cursor.rowcount > 0:
+            print('Cursos:')
+            print(from_db_cursor(cursor))
+        else:
+            print('Ainda não há cursos cadastrados.')
     except Exception as e:
         connection.rollback()
         print_error(e)
@@ -19,14 +23,14 @@ def list(connection, cursor):
 def list_students(connection, cursor, course):
     try:
         query = 'SELECT * FROM aluno_cursa AC JOIN aluno A ON AC.aluno = A.usuario WHERE curso = %s'
-        print(course)
-        print(query)
-
         cursor.execute(query, (course,))
         connection.commit()
 
-        print(f'Alunos do curso {course}:')
-        print(from_db_cursor(cursor))
+        if cursor.rowcount > 0:
+            print(f'Alunos do curso {course}:')
+            print(from_db_cursor(cursor))
+        else:
+            print('Ainda não há alunos cadastrados neste curso.')
     except Exception as e:
         connection.rollback()
         print_error(e)
@@ -39,13 +43,13 @@ def insert_student(connection, cursor, course, student):
     try:
         cursor.execute(query, (student, course, datetime.now()))
         connection.commit()
-        print(f'Aluno {student} inserido no curso {course} com sucesso.')
+        print(f'\nAluno {student} inserido no curso {course} com sucesso.\n')
     except psycopg2.errors.UniqueViolation as e:
         connection.rollback()
         print_error('o aluno {student} já está cursando {course}.')
     except psycopg2.errors.ForeignKeyViolation as e:
         connection.rollback()
-        print('violação de chave estrangeira ({e.diag.constraint_name})')
+        print_error(f'violação de chave estrangeira ({e.diag.constraint_name})')
     except Exception as e:
         connection.rollback()
         print_error(e)

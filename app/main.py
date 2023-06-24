@@ -31,7 +31,6 @@ def menu():
         case '5':
             student = input('Insira o CPF do aluno: ')
             course = input('Insira a sigla do curso: ')
-            clear()
             courses.insert_student(connection, cursor, course, student)
         case '6':
             cpf = input('CPF: ')
@@ -73,17 +72,17 @@ def menu():
                 clear()
                 menu()
 
-            insert_option = input('Deseja inserir o aluno em um curso? (s/N)')
+            insert_option = input('Deseja inserir o aluno em um curso? (s/N): ')
 
             if insert_option.lower() == 's':
-                list_option = input('Deseja listar os cursos? (s/N)')
+                list_option = input('Deseja listar os cursos? (s/N): ')
 
                 if list_option.lower() == 's':
+                    print()
                     courses.list(connection, cursor)
 
                 course = input('Insira a sigla do curso: ')
                 courses.insert_student(connection, cursor, course, student['cpf'])
-
         case 'q':
             db.close(cursor, connection)
             quit()

@@ -7,8 +7,12 @@ def list(connection, cursor):
         query = 'SELECT * FROM aluno_cursa AC JOIN aluno A ON AC.aluno = A.usuario'
         cursor.execute(query)
         connection.commit()
-        print('Alunos:')
-        print(from_db_cursor(cursor))
+
+        if cursor.rowcount > 0:
+            print('Alunos:')
+            print(from_db_cursor(cursor))
+        else:
+            print('Ainda não há alunos cadastrados.')
     except Exception as e:
         connection.rollback()
         print_error(e)
@@ -27,11 +31,12 @@ def create(connection, cursor, student):
 
     try:
         print(tuple(student.values()))
+
         cursor.execute(insert_user_query, student)
         cursor.execute(insert_student_query, (student['cpf'], False))
         connection.commit()
 
-        print('Aluno inserido com sucesso.')
+        print('\nAluno inserido com sucesso.\n')
         press_enter_message()
 
         return True
