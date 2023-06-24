@@ -2,6 +2,7 @@ import psycopg2
 from prettytable import from_db_cursor
 from util import press_enter_message, print_error
 
+
 def list(connection, cursor):
     try:
         query = 'SELECT * FROM aluno_cursa AC JOIN aluno A ON AC.aluno = A.usuario'
@@ -18,6 +19,7 @@ def list(connection, cursor):
         print_error(e)
 
     press_enter_message()
+
 
 def create(connection, cursor, student):
     insert_user_query = '''

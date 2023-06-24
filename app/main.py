@@ -4,6 +4,7 @@ import courses
 import students
 from util import clear
 
+
 def menu():
     print('''
     1. Listar todos os cursos
@@ -25,12 +26,16 @@ def menu():
             clear()
             students.list(connection, cursor)
         case '3':
-            course = input('Insira a sigla do curso: ')
+            course = input('Insira o código do curso: ')
             clear()
             courses.list_students(connection, cursor, course)
+        case '4':
+            course_key = input('Insira o código ou nome do curso: ')
+            clear()
+            courses.search(connection, cursor, course_key)
         case '5':
             student = input('Insira o CPF do aluno: ')
-            course = input('Insira a sigla do curso: ')
+            course = input('Insira o código do curso: ')
             courses.insert_student(connection, cursor, course, student)
         case '6':
             cpf = input('CPF: ')
@@ -81,7 +86,7 @@ def menu():
                     print()
                     courses.list(connection, cursor)
 
-                course = input('Insira a sigla do curso: ')
+                course = input('Insira o código do curso: ')
                 courses.insert_student(connection, cursor, course, student['cpf'])
         case 'q':
             db.close(cursor, connection)
@@ -94,12 +99,14 @@ def menu():
     clear()
     menu()
 
+
 def main():
     global cursor, connection
     connection = db.connect()
     cursor = connection.cursor()
     clear()
     menu()
+
 
 if __name__ == '__main__':
     main()

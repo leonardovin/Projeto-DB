@@ -3,6 +3,7 @@ from prettytable import from_db_cursor
 from datetime import datetime
 from util import press_enter_message, print_error
 
+
 def list(connection, cursor):
     try:
         query = 'SELECT * FROM curso'
@@ -20,6 +21,25 @@ def list(connection, cursor):
 
     press_enter_message()
 
+
+def search(connection, cursor, key):
+    try:
+        query = 'SELECT * FROM curso WHERE codigo = %s OR titulo = %s'
+        cursor.execute(query, (key, key))
+        connection.commit()
+
+        if cursor.rowcount > 0:
+            print(f'{cursor.rowcount} resultado(s) para a busca pelo curso "{key}":')
+            print(from_db_cursor(cursor))
+        else:
+            print(f'Não foi possível encontrar nenhum curso "{key}".')
+    except Exception as e:
+        connection.rollback()
+        print_error(e)
+
+    press_enter_message()
+
+
 def list_students(connection, cursor, course):
     try:
         query = 'SELECT * FROM aluno_cursa AC JOIN aluno A ON AC.aluno = A.usuario WHERE curso = %s'
@@ -36,6 +56,7 @@ def list_students(connection, cursor, course):
         print_error(e)
 
     press_enter_message()
+
 
 def insert_student(connection, cursor, course, student):
     query = 'INSERT INTO aluno_cursa(aluno, curso, data_hora) VALUES (%s, %s, %s)'

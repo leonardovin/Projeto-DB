@@ -7,6 +7,7 @@ config = {
     **os.environ
 }
 
+
 def connect():
     try:
         print('Estabelecendo conexão com a base de dados.')
@@ -23,6 +24,7 @@ def connect():
     except:
         print('Erro ao estabelecer conexão com a base de dados. Verifique a configuração utilizada.')
         quit()
+
 
 def close(cursor, connection):
     if cursor:
