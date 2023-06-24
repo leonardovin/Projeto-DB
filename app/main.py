@@ -1,9 +1,8 @@
 import psycopg2
-from pwinput import pwinput
 import db
 import courses
 import students
-from util import clear
+from util import clear, input_not_empty, pwinput_not_empty
 
 def menu():
     print('''
@@ -26,26 +25,26 @@ def menu():
             clear()
             students.list(connection, cursor)
         case '3':
-            course = input('Insira o código do curso: ')
+            course = input_not_empty('Insira o código do curso: ')
             clear()
             courses.list_students(connection, cursor, course)
         case '4':
-            course_key = input('Insira o código ou nome do curso: ')
+            course_key = input_not_empty('Insira o código ou nome do curso: ')
             clear()
             courses.search(connection, cursor, course_key)
         case '5':
-            student = input('Insira o CPF do aluno: ')
-            course = input('Insira o código do curso: ')
+            student = input_not_empty('Insira o CPF do aluno: ')
+            course = input_not_empty('Insira o código do curso: ')
             courses.insert_student(connection, cursor, course, student)
         case '6':
-            cpf = input('CPF: ')
-            nome = input('Nome: ')
-            email = input('E-mail: ')
-            senha = pwinput('Senha: ')
-            data_nasc = input('Data de nascimento: ')
-            endereco = input('Endereço: ')
-            telefone = input('Telefone: ')
-            idioma1 = input('Idioma: ')
+            cpf = input_not_empty('CPF: ')
+            nome = input_not_empty('Nome: ')
+            email = input_not_empty('E-mail: ')
+            senha = pwinput_not_empty('Senha: ')
+            data_nasc = input_not_empty('Data de nascimento: ')
+            endereco = input_not_empty('Endereço: ')
+            telefone = input_not_empty('Telefone: ')
+            idioma1 = input_not_empty('Idioma: ')
 
             student = {
                 'cpf': cpf,
@@ -86,7 +85,7 @@ def menu():
                     print()
                     courses.list(connection, cursor)
 
-                course = input('Insira o código do curso: ')
+                course = input_not_empty('Insira o código do curso: ')
                 courses.insert_student(connection, cursor, course, student['cpf'])
         case 'q':
             db.close(cursor, connection)
