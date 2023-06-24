@@ -2,31 +2,36 @@ import psycopg2
 import db
 import courses
 import students
+from util import clear
 
 def menu():
     print('''
-          1. Listar todos os cursos
-          2. Listar todos os alunos
-          3. Listar alunos de um curso
-          4. Buscar curso
-          5. Inserir aluno em um curso
-          6. Inserir aluno
-          q. Sair
-          ''')
+    1. Listar todos os cursos
+    2. Listar todos os alunos
+    3. Listar alunos de um curso
+    4. Buscar curso
+    5. Inserir aluno em um curso
+    6. Inserir aluno
+    q. Sair
+    ''')
 
     option = input('Selecione uma opção: ')
 
     match option:
         case '1':
+            clear()
             courses.list(connection, cursor)
         case '2':
+            clear()
             students.list(connection, cursor)
         case '3':
             course = input('Insira a sigla do curso: ')
+            clear()
             courses.list_students(connection, cursor, course)
         case '5':
             student = input('Insira o CPF do aluno: ')
             course = input('Insira a sigla do curso: ')
+            clear()
             courses.insert_student(connection, cursor, course, student)
         case '6':
             cpf = input('CPF: ')
@@ -65,6 +70,7 @@ def menu():
             # }
 
             if students.create(connection, cursor, student) is False:
+                clear()
                 menu()
 
             insert_option = input('Deseja inserir o aluno em um curso? (s/N)')
@@ -82,14 +88,18 @@ def menu():
             db.close(cursor, connection)
             quit()
         case _:
+            clear()
             print('Selecione uma opção válida.')
+            menu()
 
+    clear()
     menu()
 
 def main():
     global cursor, connection
     connection = db.connect()
     cursor = connection.cursor()
+    clear()
     menu()
 
 if __name__ == '__main__':

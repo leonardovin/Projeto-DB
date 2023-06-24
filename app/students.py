@@ -1,16 +1,19 @@
 import psycopg2
 from prettytable import from_db_cursor
+from util import press_enter_message, print_error
 
 def list(connection, cursor):
     try:
         query = 'SELECT * FROM aluno_cursa AC JOIN aluno A ON AC.aluno = A.usuario'
         cursor.execute(query)
         connection.commit()
-        print(f'Alunos:')
+        print('Alunos:')
         print(from_db_cursor(cursor))
     except Exception as e:
         connection.rollback()
-        print(e)
+        print_error(e)
+
+    press_enter_message()
 
 def create(connection, cursor, student):
     insert_user_query = '''
@@ -27,13 +30,23 @@ def create(connection, cursor, student):
         cursor.execute(insert_user_query, student)
         cursor.execute(insert_student_query, (student['cpf'], False))
         connection.commit()
-        print('Usuário inserido com sucesso.')
+
+        print('Aluno inserido com sucesso.')
+        press_enter_message()
+
         return True
-    except psycopg2.errors.UniqueViolation:
+    except psycopg2.errors.UniqueViolation as e:
         connection.rollback()
-        print('Já existe um usuário com esse CPF.')
+        print_error('já existe um usuário com esse CPF.')
+    except psycopg2.errors.InvalidDatetimeFormat as e:
+        connection.rollback()
+        print_error('formato de data inválido. A data deve estar no formato DD/MM/YYYY.')
+    except psycopg2.Error as e:
+        connection.rollback()
+        print_error(e.pgcode)
     except Exception as e:
         connection.rollback()
-        print(e)
+        print_error(e)
 
+    press_enter_message()
     return False
