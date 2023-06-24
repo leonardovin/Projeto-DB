@@ -1,9 +1,9 @@
 import psycopg2
+from pwinput import pwinput
 import db
 import courses
 import students
 from util import clear
-
 
 def menu():
     print('''
@@ -41,7 +41,7 @@ def menu():
             cpf = input('CPF: ')
             nome = input('Nome: ')
             email = input('E-mail: ')
-            senha = input('Senha: ')
+            senha = pwinput('Senha: ')
             data_nasc = input('Data de nascimento: ')
             endereco = input('Endereço: ')
             telefone = input('Telefone: ')

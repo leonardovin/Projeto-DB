@@ -1,3 +1,4 @@
 prettytable==3.8.0
 psycopg2_binary==2.9.6
+pwinput==1.0.3
 python-dotenv==1.0.0
