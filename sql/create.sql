@@ -208,8 +208,8 @@ CREATE TABLE atividade_pratica (
   recurso_pago_nome VARCHAR(50),
   duracao INTERVAL,
   assunto VARCHAR(50) NOT NULL,
-  PRIMARY KEY PK_atividade_pratica (recurso_pago_curso, recurso_pago_nome),
-  FOREIGN KEY FK_atividade_pratica_recurso_pago (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome)
+  CONSTRAINT pk_atividade_pratica PRIMARY KEY (recurso_pago_curso, recurso_pago_nome),
+  CONSTRAINT fk_atividade_pratica_recurso_pago FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome)
 );
 
 /*Questão = { id, atividade_prática_curso, atividade_prática_nome, nro, pergunta*, alt1*, alt2*, alt3, alt4, alt_correta* }*/
