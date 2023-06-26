@@ -3,6 +3,7 @@
 
 # Environment files
 .env
+venv/
 
 # Byte-compiled files
 __pycache__/

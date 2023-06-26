@@ -38,7 +38,11 @@ CREATE TABLE usuario (
     email ~ '^[A-Za-z0-9\._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
   ),
   CONSTRAINT cartao_cred_val_formato CHECK (cartao_cred_validade ~ '^[0-9]{2}/[0-9]{4}$'),
-  CONSTRAINT telefone_formato CHECK (telefone ~ '^\([0-9]{2}\) [0-9]{4,5}\-[0-9]{4}$')
+  CONSTRAINT telefone_formato CHECK (telefone ~ '^\([0-9]{2}\) [0-9]{4,5}\-[0-9]{4}$'),
+  CONSTRAINT data_nasc_validate CHECK (
+    data_nasc < CURRENT_DATE
+    AND data_nasc > '1900-01-01'
+  )
 );
 
 /*Aluno = { usuário, assinante* }*/
@@ -49,29 +53,12 @@ CREATE TABLE aluno (
   CONSTRAINT fk_aluno_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf)
 );
 
-/*Interesse = { aluno, interesse }*/
-CREATE TABLE interesse (
-  aluno CHAR(14),
-  interesse VARCHAR(50) NOT NULL,
-  CONSTRAINT pk_interesse PRIMARY KEY (aluno, interesse),
-  CONSTRAINT fk_interesse_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario)
-);
-
 /*Administrador = { usuário, nível_acesso* }*/
 CREATE TABLE administrador (
   usuario CHAR(14),
   nivel_acesso INTEGER NOT NULL,
   CONSTRAINT pk_administrador PRIMARY KEY (usuario),
   CONSTRAINT fk_administrador_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf)
-);
-
-/*AdministradorAtividade = { administrador, log*,  data_hora* }*/
-CREATE TABLE administrador_atividade (
-  administrador CHAR(14),
-  log TEXT,
-  data_hora TIMESTAMP NOT NULL,
-  CONSTRAINT pk_administrador_atividade PRIMARY KEY (administrador, data_hora),
-  CONSTRAINT fk_administrador_atividade_administrador FOREIGN KEY (administrador) REFERENCES administrador(usuario)
 );
 
 CREATE TYPE tipo_tutor as ENUM ('voluntario', 'especialista');
@@ -84,6 +71,23 @@ CREATE TABLE tutor (
   CONSTRAINT pk_tutor PRIMARY KEY (usuario),
   CONSTRAINT fk_tutor_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf),
   CONSTRAINT fk_tutor_cadastrado_por FOREIGN KEY (cadastrado_por) REFERENCES administrador(usuario)
+);
+
+/*Interesse = { aluno, interesse }*/
+CREATE TABLE interesse (
+  aluno CHAR(14),
+  interesse VARCHAR(50) NOT NULL,
+  CONSTRAINT pk_interesse PRIMARY KEY (aluno, interesse),
+  CONSTRAINT fk_interesse_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario)
+);
+
+/*AdministradorAtividade = { administrador, log*,  data_hora* }*/
+CREATE TABLE administrador_atividade (
+  administrador CHAR(14),
+  log TEXT,
+  data_hora TIMESTAMP NOT NULL,
+  CONSTRAINT pk_administrador_atividade PRIMARY KEY (administrador, data_hora),
+  CONSTRAINT fk_administrador_atividade_administrador FOREIGN KEY (administrador) REFERENCES administrador(usuario)
 );
 
 /*TutorHabilidade = { tutor, habilidade }*/
