@@ -53,12 +53,32 @@ def create(connection, cursor, student):
     except psycopg2.errors.UniqueViolation as e:
         connection.rollback()
         print_error('já existe um usuário com esse CPF.')
+    except psycopg2.errors.CheckViolation as e:
+        connection.rollback()
+
+        constraint_name = e.diag.constraint_name
+        print_error(f'violação de check ({constraint_name})')
+
+        error_messages = {
+            'cpf_formato': 'formato de CPF inválido.',
+            'cartao_cred_cpf_formato': 'formato do número de cartão de crédito inválido.',
+            'cartao_cred_val_formato': 'formato de validade do cartão de crédito inválido.',
+            'telefone_formato': 'formato de número de telefone inválido.',
+            'email_formato': 'formato de e-mail inválido.'
+        }
+
+        print_error(f'{error_messages[constraint_name]} Verifique os dados informados.')
     except psycopg2.errors.InvalidDatetimeFormat as e:
         connection.rollback()
         print_error('formato de data inválido. A data deve estar no formato DD/MM/YYYY.')
+    except psycopg2.errors.StringDataRightTruncation as e:
+        connection.rollback()
+        print(e)
+        print_error('tamanho inválido. Verifique os dados informados.')
     except psycopg2.Error as e:
         connection.rollback()
         print_error(e.pgcode)
+        print_error(e)
     except Exception as e:
         connection.rollback()
         print_error(e)

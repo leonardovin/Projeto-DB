@@ -51,12 +51,14 @@ def menu():
                 'nome': nome,
                 'email': email,
                 'senha': senha,
-                'tipo': 'ALUNO',
+                # 'tipo': 'ALUNO',
+                'tipo': 'aluno',
                 'data_nasc': data_nasc,
                 'endereco': endereco,
                 'telefone': telefone,
                 'idioma1': idioma1,
-                'status': 'ATIVO',
+                # 'status': 'ATIVO',
+                'status': 'ativo',
             }
 
             # student = {
