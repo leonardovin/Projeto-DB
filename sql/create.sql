@@ -98,7 +98,7 @@ CREATE TABLE tutor_avaliacao (
   aluno CHAR(11),
   avaliacao INTEGER NOT NULL,
   data_hora TIMESTAMP NOT NULL,
-  PRIMARY KEY (tutor, aluno, data_hora),
+  CONSTRAINT pk_tutor_avaliacao PRIMARY KEY (tutor, aluno, data_hora),
   CONSTRAINT fk_tutor_avaliacao_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario),
   CONSTRAINT fk_tutor_avaliacao_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario)
 );
@@ -119,7 +119,7 @@ CREATE TABLE especialista (
   conta_nro_banco VARCHAR(20),
   conta_agencia VARCHAR(20),
   conta_nro VARCHAR(20),
-  CONSTRAINT pk_tutor PRIMARY KEY (tutor),
+  CONSTRAINT pk_especialista PRIMARY KEY (tutor),
   CONSTRAINT fk_especialista_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario)
 );
 
