@@ -105,7 +105,16 @@ def insert_student(connection, cursor, course, student):
         print_error('o aluno {student} já está cursando {course}.')
     except psycopg2.errors.ForeignKeyViolation as e:
         connection.rollback()
-        print_error(f'violação de chave estrangeira ({e.diag.constraint_name})')
+        constraint_name = e.diag.constraint_name
+
+        print_error(f'violação de chave estrangeira ({constraint_name})')
+
+        error_messages = {
+            'fk_aluno_cursa_aluno': 'o aluno especificado não existe.',
+            'fk_aluno_cursa_curso': 'o curso especificado não existe.'
+        }
+
+        print_error(f'{error_messages[constraint_name]} Verifique os dados informados.')
     except Exception as e:
         connection.rollback()
         print_error(e)
