@@ -1,5 +1,7 @@
 CREATE TYPE status AS ENUM ('ativo', 'inativo');
 
+CREATE TYPE usuario_tipo AS ENUM ('aluno', 'tutor', 'administrador');
+
 /*
  Usuário = { CPF, nome*, email*, senha*, tipo*, data_nasc*, endereço*, telefone*, idioma1*, idioma2, url_foto_perfil,
  cartão_cred_nro, cartão_cred_validade, cartão_cred_cvv, cartão_cred_cpf, cartão_cred_titular,
@@ -10,7 +12,7 @@ CREATE TABLE usuario (
   nome VARCHAR(50) NOT NULL,
   email VARCHAR(50) NOT NULL,
   senha VARCHAR(30) NOT NULL,
-  tipo VARCHAR(13) NOT NULL,
+  tipo usuario_tipo NOT NULL,
   data_nasc DATE NOT NULL,
   endereco VARCHAR(255) NOT NULL,
   telefone VARCHAR(11) NOT NULL,
@@ -260,7 +262,7 @@ CREATE TABLE aluno_acesso_recurso_pago (
   recurso_pago_nome VARCHAR(50),
   CONSTRAINT pk_aluno_acesso_recurso_pago PRIMARY KEY (aluno, recurso_pago_curso, recurso_pago_nome),
   CONSTRAINT fk_aluno_acesso_recurso_pago_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario),
-  CONSTRAINT fk_aluno_acesso_recurso_pago_recurso_pago FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(curso, nome)
+  CONSTRAINT fk_aluno_acesso_recurso_pago_recurso_pago FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome)
 );
 
 /*AdministraRecurso = { recurso_curso, recurso_nome, especialista }*/
