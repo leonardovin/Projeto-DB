@@ -26,8 +26,6 @@ def connect():
         quit()
 
 
-def close(cursor, connection):
-    if cursor:
-        cursor.close()
+def close(connection):
     if connection:
         connection.close()

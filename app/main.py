@@ -20,22 +20,22 @@ def menu():
     match option:
         case '1':
             clear()
-            courses.list(connection, cursor)
+            courses.list(connection)
         case '2':
             clear()
-            students.list(connection, cursor)
+            students.list(connection)
         case '3':
             course = input_not_empty('Insira o código do curso: ')
             clear()
-            courses.list_students(connection, cursor, course)
+            courses.list_students(connection, course)
         case '4':
             course_key = input_not_empty('Insira o código ou nome do curso: ')
             clear()
-            courses.search(connection, cursor, course_key)
+            courses.search(connection, course_key)
         case '5':
             student = input_not_empty('Insira o CPF do aluno: ')
             course = input_not_empty('Insira o código do curso: ')
-            courses.insert_student(connection, cursor, course, student)
+            courses.insert_student(connection, course, student)
         case '6':
             cpf = input_not_empty('CPF: ')
             nome = input_not_empty('Nome: ')
@@ -74,7 +74,7 @@ def menu():
                 # 'status': 'ATIVO',
             # }
 
-            if students.create(connection, cursor, student) is False:
+            if students.create(connection, student) is False:
                 clear()
                 menu()
 
@@ -85,12 +85,12 @@ def menu():
 
                 if list_option.lower() == 's':
                     print()
-                    courses.list(connection, cursor)
+                    courses.list(connection)
 
                 course = input_not_empty('Insira o código do curso: ')
-                courses.insert_student(connection, cursor, course, student['cpf'])
+                courses.insert_student(connection, course, student['cpf'])
         case 'q':
-            db.close(cursor, connection)
+            db.close(connection)
             quit()
         case _:
             clear()
@@ -102,9 +102,8 @@ def menu():
 
 
 def main():
-    global cursor, connection
+    global connection
     connection = db.connect()
-    cursor = connection.cursor()
     clear()
     menu()
 
