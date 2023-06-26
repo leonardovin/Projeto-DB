@@ -54,7 +54,8 @@ CREATE TABLE interesse (
   aluno char(11),
   interesse VARCHAR(50) NOT NULL,
   -- Create the keys constraints with an explicit name
-  CONSTRAINT pkey_interesse PRIMARY KEY (aluno, interesse) CONSTRAINT fkey_interesse_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario)
+  CONSTRAINT pkey_interesse PRIMARY KEY (aluno, interesse),
+  CONSTRAINT fkey_interesse_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario)
 );
 
 /*Administrador = { usuário, nível_acesso* }*/
@@ -184,7 +185,7 @@ CREATE TABLE recurso_pago (
   preco_unico DECIMAL(10, 2) NOT NULL,
   tipo recurso_pago_tipo NOT NULL,
   CONSTRAINT pk_recurso_pago PRIMARY KEY (recurso_curso, recurso_nome),
-  CONSTRAINT fkey_recurso_pago_pk foreign key (recurso_curso, recurso_nome) references recurso(curso, nome)
+  CONSTRAINT fkey_recurso_pago_recurso foreign key (recurso_curso, recurso_nome) references recurso(curso, nome)
 );
 
 /*Vídeotutorial = { recurso_curso, recurso_nome, duração* }*/
@@ -193,7 +194,7 @@ CREATE TABLE videotutorial (
   recurso_nome VARCHAR(50),
   duracao INTERVAL NOT NULL,
   constraint pk_videotutorial PRIMARY KEY (recurso_curso, recurso_nome),
-  constraint fk_videdotutorial_pk foreign key (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome)
+  constraint fk_videdotutorial_recurso foreign key (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome)
 );
 
 /*Guia = { recurso_curso, recurso_nome, formato* }*/
@@ -202,7 +203,7 @@ CREATE TABLE guia (
   recurso_nome VARCHAR(50),
   formato char(3) NOT NULL,
   CONSTRAINT pk_guia PRIMARY KEY (recurso_curso, recurso_nome),
-  CONSTRAINT fk_guia_pk foreign key (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome)
+  CONSTRAINT fk_guia_recurso_curso foreign key (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome)
 );
 
 /*AtividadePrática = { recurso_pago_curso, recurso_pago_nome, duração, assunto*  }*/
@@ -211,8 +212,8 @@ CREATE TABLE atividade_pratica (
   recurso_pago_nome VARCHAR(50),
   duracao INTERVAL,
   assunto VARCHAR(50) NOT NULL,
-  PRIMARY KEY (recurso_pago_curso, recurso_pago_nome),
-  foreign key (recurso_pago_curso, recurso_pago_nome) references recurso_pago(recurso_curso, recurso_nome)
+  PRIMARY KEY PK_atividade_pratica (recurso_pago_curso, recurso_pago_nome),
+  FOREIGN KEY FK_atividade_pratica_recurso_pago (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome)
 );
 
 /*Questão = { id, atividade_prática_curso, atividade_prática_nome, nro, pergunta*, alt1*, alt2*, alt3, alt4, alt_correta* }*/
