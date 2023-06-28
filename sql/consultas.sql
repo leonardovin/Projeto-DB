@@ -26,7 +26,7 @@ WHERE
 /*
  Explicação: Essa consulta retorna os alunos que estão matriculados em todos os cursos disponíveis. Ela utiliza a cláusula NOT EXISTS para verificar se não existe nenhuma matrícula para um aluno em algum curso. Os alunos que não possuem nenhuma matrícula são considerados como estando matriculados em todos os cursos.
  */
--- Consulta 2: Listar os tutores que possuem uma média de avaliação superior a 4.5
+-- Consulta 2: Listar os tutores que possuem uma média de avaliação superior a 4.5 e média de avaliação dos cursos que tutoriam
 SELECT
   u.cpf,
   u.nome
