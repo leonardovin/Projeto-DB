@@ -1,355 +1,638 @@
--- Insert entries for "Usuário" table
+/*
+ Usuário = { CPF, nome*, email*, senha*, tipo*, data_nasc*, endereço*, telefone*, idioma1*, idioma2, url_foto_perfil,
+ cartão_cred_nro, cartão_cred_validade, cartão_cred_cvv, cartão_cred_cpf, cartão_cred_titular,
+ status*, data_último_acesso, data_última_edição }
+ */
+/*Aluno = { usuário, assinante* }*/
+/*Administrador = { usuário, nível_acesso* }*/
+/*Tutor = { usuário, tipo*, cadastrado_por* }*/
+/*Interesse = { aluno, interesse }*/
+/*AdministradorAtividade = { administrador, log*,  data_hora* }*/
+/*TutorHabilidade = { tutor, habilidade }*/
+/*TutorAvaliação = { tutor, aluno, avaliação*, data_hora* }*/
+/*Voluntário = { tutor, motivação }*/
+/*Especialista = { tutor, taxa*, currículo_acadêmico*, conta_nro_banco*, conta_agência*, conta_nro* }*/
+/*AtividadePráticaResposta = { aluno, questão, alternativa }*/
+/*Mensagem = { aluno1, aluno2, data_hora, conteudo }*/
+/*Curso = { código, título*, categoria*, descrição*, nível_dificuldade*, média_aval, criado_por* }*/
+/*Recurso = { curso, nome, descrição, tipo* }*/
+/*RecursoPago = { recurso_curso, recurso_nome, preço_único*, tipo* }*/
+/*Vídeotutorial = { recurso_curso, recurso_nome, url*, duração* }*/
+/*Guia = { recurso_curso, recurso_nome, formato* }*/
+/*AtividadePrática = { recurso_pago_curso, recurso_pago_nome, duração, assunto*  }*/
+/*Questão = { id, atividade_prática_curso, atividade_prática_nome, nro, pergunta*, alt1*, alt2*, alt3, alt4, alt_correta* }*/
+/*TutoriaPersonalizada = { recurso_pago_curso, recurso_pago_nome, assunto* }*/
+/*Agendamento = { aluno, especialista, data_hora, tutoria_personalizada_curso*, tutoria_personalizada_nome* }*/
+/*AlunoAcessoRecursoPago = { aluno, recurso_pago_curso, recurso_pago_nome }*/
+/*AdministraRecurso = { recurso_curso, recurso_nome, especialista }*/
+/*AlunoCursa = { aluno, curso, avaliação, nota, data_hora* }*/
+/*Tutoria = { curso, voluntário }*/
 INSERT INTO
-  Usuario (
-    CPF,
-    nome,
-    email,
-    senha,
-    tipo,
-    data_nasc,
-    endereço,
-    telefone,
-    idioma1,
-    idioma2,
-    url_foto_perfil,
-    cartão_cred_nro,
-    cartão_cred_validade,
-    cartão_cred_cvv,
-    cartão_cred_cpf,
-    cartão_cred_titular,
-    status,
-    data_último_acesso,
-    data_última_edição
-  )
+  usuario -- i need 2 admins, 4 tutors, 2 students
 VALUES
   (
-    '12345678901',
-    'John Doe',
-    'johndoe@example.com',
-    'password1',
-    'tipo1',
-    '2000-01-01',
-    '123 Main St',
-    '1234567890',
-    'English',
-    'Spanish',
-    'https://example.com/profile1.jpg',
+    '123.456.789-01',
+    'João da Silva',
+    'example@gmail.com',
+    '123456',
+    'aluno',
+    '1990-01-01',
+    'Rua dos Bobos, 0',
+    '(12) 1345-6789',
+    'Português',
+    'Inglês',
+    'http://example.com',
     '1234567890123456',
-    '2025-12',
+    '01/2022',
     '123',
-    '12345678901',
-    'John Doe',
+    '123.456.789-01',
+    'João da Silva',
     'ativo',
-    '2023-06-20',
-    '2023-06-20'
-  );
-
-INSERT INTO
-  Usuario (
-    CPF,
-    nome,
-    email,
-    senha,
-    tipo,
-    data_nasc,
-    endereço,
-    telefone,
-    idioma1,
-    idioma2,
-    url_foto_perfil,
-    cartão_cred_nro,
-    cartão_cred_validade,
-    cartão_cred_cvv,
-    cartão_cred_cpf,
-    cartão_cred_titular,
-    status,
-    data_último_acesso,
-    data_última_edição
-  )
-VALUES
+    '2018-01-01',
+    '2018-01-01'
+  ),
   (
-    '98765432109',
-    'Jane Smith',
-    'janesmith@example.com',
-    'password2',
-    'tipo2',
-    '1995-05-10',
-    '456 Oak St',
-    '9876543210',
-    'French',
-    NULL,
-    'https://example.com/profile2.jpg',
-    '9876543210987654',
-    '2024-09',
-    '456',
-    '98765432109',
-    'Jane Smith',
+    '123.456.789-02',
+    'Maria da Silva',
+    'admin@gmail.com',
+    '123456',
+    'administrador',
+    '1990-01-01',
+    'Rua dos Bobos, 0',
+    '(12) 91345-6789',
+    'Português',
+    'Inglês',
+    'exemple.com',
+    '1234567890123456',
+    '01/2022',
+    '123',
+    '123.456.789-02',
+    'Maria da Silva',
     'ativo',
-    '2023-06-19',
-    '2023-06-19'
+    '2018-01-01',
+    '2018-01-01'
+  ),
+  (
+    '123.456.789-03',
+    'José da Silva',
+    'exemplao@gmail.com',
+    '123456',
+    'tutor',
+    '1990-01-01',
+    'Rua dos Bobos, 0',
+    '(12) 91345-8789',
+    'Português',
+    'Inglês',
+    'exemple.com',
+    '1234567890123456',
+    '01/2022',
+    '123',
+    '123.456.789-03',
+    'José da Silva',
+    'ativo',
+    '2018-01-01',
+    '2018-01-01'
+  ),
+  (
+    '123.456.789-04',
+    'José da Silva',
+    'exassaasa@gmail.com',
+    '123456',
+    'tutor',
+    '1990-01-01',
+    'Rua dos Bobos, 0',
+    '(12) 91345-8789',
+    'Português',
+    'Inglês',
+    'exemple.com',
+    '1234567890123456',
+    '01/2022',
+    '123',
+    '123.456.789-04',
+    'Jotaro da Silva',
+    'ativo',
+    '2018-01-01',
+    '2018-01-01'
+  ),
+  (
+    '123.456.789-05',
+    'Jolyne da Silva',
+    'asdfasdf@gmail.com',
+    '123456',
+    'aluno',
+    '1990-01-01',
+    'Rua dos Bobos, 0',
+    '(12) 91345-8789',
+    'Português',
+    'Inglês',
+    'exemple.com',
+    '1234567890123456',
+    '01/2022',
+    '123',
+    '123.456.789-05',
+    'José da Silva',
+    'ativo',
+    '2018-01-01',
+    '2018-01-01'
+  ),
+  (
+    '123.456.789-06',
+    'Josias da Silva',
+    'asdfasdfasd@gmail.com',
+    '123456',
+    'administrador',
+    '1990-01-01',
+    'Rua dos Bobos, 0',
+    '(12) 91345-8789',
+    'Português',
+    'Inglês',
+    'exemple.com',
+    '1234567890123456',
+    '01/2022',
+    '123',
+    '123.456.789-06',
+    'Josias da Silva',
+    'ativo',
+    '2018-01-01',
+    '2018-01-01'
+  ),
+  (
+    '123.456.789-07',
+    'Joseph da Silva',
+    'ficaca@gmail.com',
+    '123456',
+    'tutor',
+    '1990-01-01',
+    'Rua dos Bobos, 0',
+    '(12) 91345-8789',
+    'Português',
+    'Inglês',
+    'exemple.com',
+    '1234567890123456',
+    '01/2022',
+    '123',
+    '123.456.789-07',
+    'Joseph da Silva',
+    'ativo',
+    '2018-01-01',
+    '2018-01-01'
+  ),
+  (
+    '123.456.789-08',
+    'Joana da Silva',
+    'jsshfh@gmail.com',
+    '123456',
+    'tutor',
+    '1990-01-01',
+    'Rua dos Bobos, 0',
+    '(12) 91345-8789',
+    'Português',
+    'Inglês',
+    'exemple.com',
+    '1234567890123456',
+    '01/2022',
+    '123',
+    '123.456.789-08',
+    'Joana da Silva',
+    'ativo',
+    '2018-01-01',
+    '2018-01-01'
   );
 
--- Insert entries for "Mensagem" table
 INSERT INTO
-  mensagem (
-    Curso,
-    título,
-    categoria,
-    descrição,
-    nível_dificuldade,
-    média_aval,
-    criado_por
-  )
+  aluno
+VALUES
+  ('123.456.789-01', 'TRUE'),
+  ('123.456.789-05', 'FALSE');
+
+-- admin
+INSERT INTO
+  administrador
+VALUES
+  ('123.456.789-02', '1'),
+  ('123.456.789-06', '2');
+
+-- tutor voluntario e especialista
+INSERT INTO
+  tutor
+VALUES
+  ('123.456.789-07', 'voluntario', '123.456.789-06'),
+  ('123.456.789-03', 'voluntario', '123.456.789-02'),
+  (
+    '123.456.789-04',
+    'especialista',
+    '123.456.789-02'
+  ),
+  (
+    '123.456.789-08',
+    'especialista',
+    '123.456.789-06'
+  );
+
+--interesse
+INSERT INTO
+  interesse
+VALUES
+  ('123.456.789-01', 'Whatsapp'),
+  ('123.456.789-01', 'Facebook'),
+  ('123.456.789-01', 'Programação'),
+  ('123.456.789-01', 'Stands'),
+  ('123.456.789-05', 'Whatsapp'),
+  ('123.456.789-05', 'Facebook'),
+  ('123.456.789-05', 'Programação'),
+  ('123.456.789-05', 'Stands');
+
+--AdministradorAtividade
+INSERT INTO
+  administrador_atividade
 VALUES
   (
-    'curso1',
-    'título1',
-    'categoria1',
-    'descrição1',
-    'fácil',
-    4.5,
-    'usuario1'
+    '123.456.789-02',
+    'Criou o tutor José da Silva',
+    '2018-01-01:00:00:10'
+  ),
+  (
+    '123.456.789-02',
+    'Criou o tutor Jotaro da Silva',
+    '2018-01-01:00:00:20'
   );
 
+--TutorHabilidade
 INSERT INTO
-  mensagem (
-    Curso,
-    título,
-    categoria,
-    descrição,
-    nível_dificuldade,
-    média_aval,
-    criado_por
-  )
+  tutor_habilidade
+VALUES
+  ('123.456.789-03', 'Whatsapp'),
+  ('123.456.789-03', 'Facebook'),
+  ('123.456.789-04', 'Programação'),
+  ('123.456.789-04', 'Stands');
+
+--TutorAvaliação
+INSERT INTO
+  tutor_avaliacao
 VALUES
   (
-    'curso2',
-    'título2',
-    'categoria2',
-    'descrição2',
-    'médio',
-    3.8,
-    'usuario2'
+    '123.456.789-03',
+    '123.456.789-01',
+    '5',
+    '2018-01-01:00:00:10'
+  ),
+  (
+    '123.456.789-04',
+    '123.456.789-01',
+    '4',
+    '2018-01-01:00:00:20'
   );
 
--- Insert entries for "Recurso" table
+/*Voluntário = { tutor, motivação }*/
 INSERT INTO
-  recurso (curso, nome, descrição, tipo)
-VALUES
-  ('curso1', 'recurso1', 'descrição1', 'tipo1');
-
-INSERT INTO
-  recurso (curso, nome, descrição, tipo)
-VALUES
-  ('curso2', 'recurso2', 'descrição2', 'tipo2');
-
--- Insert entries for "RecursoPago" table
-INSERT INTO
-  recurso_pago (recurso_curso, recurso_nome, preço_único, tipo)
-VALUES
-  ('curso1', 'recurso1', 10.99, 'tipo1');
-
-INSERT INTO
-  recurso_pago (recurso_curso, recurso_nome, preço_único, tipo)
-VALUES
-  ('curso2', 'recurso2', 19.99, 'tipo2');
-
--- Insert entries for "Vídeotutorial" table
-INSERT INTO
-  vídeotutorial (recurso_curso, recurso_nome, duração)
-VALUES
-  ('curso1', 'recurso1', '1 hour');
-
-INSERT INTO
-  vídeotutorial (recurso_curso, recurso_nome, duração)
-VALUES
-  ('curso2', 'recurso2', '45 minutes');
-
--- Insert entries for "Guia" table
-INSERT INTO
-  guia (recurso_curso, recurso_nome, formato)
-VALUES
-  ('curso1', 'recurso1', 'PDF');
-
-INSERT INTO
-  guia (recurso_curso, recurso_nome, formato)
-VALUES
-  ('curso2', 'recurso2', 'eBook');
-
--- Insert entries for "AtividadePrática" table
-INSERT INTO
-  atividadeprática (
-    recurso_pago_curso,
-    recurso_pago_nome,
-    duração,
-    assunto
-  )
-VALUES
-  ('curso1', 'recurso1', '2 hours', 'assunto1');
-
-INSERT INTO
-  atividadeprática (
-    recurso_pago_curso,
-    recurso_pago_nome,
-    duração,
-    assunto
-  )
-VALUES
-  ('curso2', 'recurso2', '1.5 hours', 'assunto2');
-
--- Insert entries for "Questão" table
-INSERT INTO
-  questão (
-    id,
-    atividade_prática_curso,
-    atividade_prática_nome,
-    nro,
-    pergunta,
-    alt1,
-    alt2,
-    alt3,
-    alt4,
-    alt_correta
-  )
+  voluntario
 VALUES
   (
-    1,
-    'curso1',
-    'recurso1',
-    1,
-    'pergunta1',
-    'opção1',
-    'opção2',
-    'opção3',
-    'opção4',
-    'opção1'
+    '123.456.789-07',
+    'Quero ajudar as pessoas a aprenderem a usar o WhatsApp'
+  ),
+  (
+    '123.456.789-03',
+    'Quero ajudar as pessoas a aprenderem a usar o Facebook'
   );
 
+/*Especialista = { tutor, taxa*, currículo_acadêmico*, conta_nro_banco*, conta_agência*, conta_nro* }*/
 INSERT INTO
-  questão (
-    id,
-    atividade_prática_curso,
-    atividade_prática_nome,
-    nro,
-    pergunta,
-    alt1,
-    alt2,
-    alt3,
-    alt4,
-    alt_correta
-  )
+  especialista
 VALUES
   (
-    2,
-    'curso2',
-    'recurso2',
-    1,
-    'pergunta2',
-    'opção1',
-    'opção2',
-    'opção3',
-    'opção4',
-    'opção3'
+    '123.456.789-04',
+    '100',
+    'Sou formado em Engenharia de Software',
+    '123456',
+    '1234',
+    '123456789'
+  ),
+  (
+    '123.456.789-08',
+    '100',
+    'Sou formado em Engenharia de Software',
+    '123456',
+    '1234',
+    '123456789'
   );
 
--- Insert entries for "TutoriaPersonalizada" table
+/*Mensagem = { aluno1, aluno2, data_hora, conteudo }*/
 INSERT INTO
-  tutoriapersonalizada (recurso_pago_curso, recurso_pago_nome, assunto)
-VALUES
-  ('curso1', 'recurso1', 'assunto1');
-
-INSERT INTO
-  tutoriapersonalizada (recurso_pago_curso, recurso_pago_nome, assunto)
-VALUES
-  ('curso2', 'recurso2', 'assunto2');
-
--- Insert entries for "Agendamento" table
-INSERT INTO
-  agendamento (
-    aluno,
-    especialista,
-    data_hora,
-    tutoria_personalizada_curso,
-    tutoria_personalizada_nome
-  )
+  mensagem
 VALUES
   (
-    'usuario1',
-    'especialista1',
-    '2023-06-21 10:00:00',
-    'curso1',
-    'recurso1'
+    '123.456.789-01',
+    '123.456.789-05',
+    '2018-01-01:00:00:10',
+    'Olá, tudo bem?'
+  ),
+  (
+    '123.456.789-05',
+    '123.456.789-01',
+    '2018-01-01:00:00:20',
+    'Td e vc?'
   );
 
+--Curso
+/*Curso = { código, título*, categoria*, descrição*, nível_dificuldade*, média_aval, criado_por* }*/
 INSERT INTO
-  agendamento (
-    aluno,
-    especialista,
-    data_hora,
-    tutoria_personalizada_curso,
-    tutoria_personalizada_nome
-  )
+  curso
 VALUES
   (
-    'usuario2',
-    'especialista2',
-    '2023-06-21 11:00:00',
-    'curso2',
-    'recurso2'
+    'CELIN-WA01',
+    'Curso de WhatsApp',
+    'Celular e Internet',
+    'Curso de WhatsApp para  iniciantes',
+    '1',
+    '7',
+    '123.456.789-04'
+  ),
+  (
+    'CELIN-FB01',
+    'Curso de Facebook',
+    'Celular e Internet',
+    'Curso de Facebook no Celular para  iniciantes',
+    '1',
+    '7',
+    '123.456.789-04'
   );
 
--- Insert entries for "AlunoAcessoRecursoPago" table
+/*Tutoria = { curso, voluntário }*/
 INSERT INTO
-  aluno_acesso_recurso_pago (aluno, recurso_pago_curso, recurso_pago_nome)
+  tutoria
 VALUES
-  ('usuario1', 'curso1', 'recurso1');
+  ('CELIN-WA01', '123.456.789-03'),
+  ('CELIN-FB01', '123.456.789-03');
 
+/*Recurso = { curso, nome, descrição, tipo* }*/
 INSERT INTO
-  aluno_acesso_recurso_pago (aluno, recurso_pago_curso, recurso_pago_nome)
-VALUES
-  ('usuario2', 'curso2', 'recurso2');
-
--- Insert entries for "AdministraRecurso" table
-INSERT INTO
-  administra_recurso (recurso_curso, recurso_nome, especialista)
-VALUES
-  ('curso1', 'recurso1', 'especialista1');
-
-INSERT INTO
-  administra_recurso (recurso_curso, recurso_nome, especialista)
-VALUES
-  ('curso2', 'recurso2', 'especialista2');
-
--- Insert entries for "AlunoCursa" table
-INSERT INTO
-  aluno_cursa (aluno, curso, avaliação, nota, data_hora)
+  recurso
 VALUES
   (
-    'usuario1',
-    'curso1',
-    'avaliação1',
-    4.5,
-    '2023-06-20 14:00:00'
+    'CELIN-WA01',
+    'Grupo de WhatsApp',
+    'Grupo de WhatsApp para tirar dúvidas',
+    'comum'
+  ),
+  (
+    'CELIN-WA01',
+    'Video de WhatsApp',
+    'Video de WhatsApp para tirar dúvidas',
+    'comum'
+  ),
+  (
+    'CELIN-FB01',
+    'Grupo de Facebook',
+    'Grupo de Facebook para tirar dúvidas',
+    'comum'
+  ),
+  (
+    'CELIN-FB01',
+    'Video de Facebook',
+    'Video de Facebook para tirar dúvidas',
+    'comum'
+  ),
+  (
+    'CELIN-WA01',
+    'Tutoria Personalizada WhatsApp',
+    'Tutoria de whatsapp',
+    'pago'
+  ),
+  (
+    'CELIN-WA01',
+    'Atividade de WhatsApp - Conceitos Iniciais',
+    'Atividade de WhatsApp - Conceitos Iniciais',
+    'pago'
+  ),
+  (
+    'CELIN-FB01',
+    'Tutoria de Facebook',
+    'Tutoria de Facebook',
+    'pago'
+  ),
+  (
+    'CELIN-FB01',
+    'Atividade de Facebook - Conceitos Iniciais',
+    'Atividade de Facebook - Conceitos Iniciais',
+    'pago'
   );
 
+/*RecursoPago = { recurso_curso, recurso_nome, preço_único*, tipo* }*/
 INSERT INTO
-  aluno_cursa (aluno, curso, avaliação, nota, data_hora)
+  recurso_pago
 VALUES
   (
-    'usuario2',
-    'curso2',
-    'avaliação2',
-    3.8,
-    '2023-06-19 15:00:00'
+    'CELIN-WA01',
+    'Atividade de WhatsApp - Conceitos Iniciais',
+    '10',
+    'atividade_pratica'
+  ),
+  (
+    'CELIN-WA01',
+    'Tutoria Personalizada WhatsApp',
+    '10',
+    'tutoria_personalizada'
+  ),
+  (
+    'CELIN-FB01',
+    'Atividade de Facebook - Conceitos Iniciais',
+    '10',
+    'atividade_pratica'
+  ),
+  (
+    'CELIN-FB01',
+    'Tutoria de Facebook',
+    '10',
+    'tutoria_personalizada'
   );
 
--- Insert entries for "Tutoria" table
+/*Vídeotutorial = { recurso_curso, recurso_nome, url*, duração* }*/
 INSERT INTO
-  tutoria (curso, voluntário)
+  videotutorial
 VALUES
-  ('curso1', 'tutor1');
+  (
+    'CELIN-WA01',
+    'Video de WhatsApp',
+    'https://www.youtube.com/watch?v=1',
+    '10'
+  ),
+  (
+    'CELIN-FB01',
+    'Video de Facebook',
+    'https://www.youtube.com/watch?v=2',
+    '10'
+  );
 
+/*Guia = { recurso_curso, recurso_nome, formato*, url }*/
 INSERT INTO
-  tutoria (curso, voluntário)
+  guia
 VALUES
-  ('curso2', 'tutor2');
+  (
+    'CELIN-WA01',
+    'Grupo de WhatsApp',
+    'txt',
+    'https://www.google.com'
+  ),
+  (
+    'CELIN-FB01',
+    'Grupo de Facebook',
+    'txt',
+    'https://www.google.com'
+  );
+
+/*AtividadePrática = { recurso_pago_curso, recurso_pago_nome, duração, assunto*  }*/
+INSERT INTO
+  atividade_pratica
+VALUES
+  (
+    'CELIN-WA01',
+    'Atividade de WhatsApp - Conceitos Iniciais',
+    '10',
+    'Conceitos Iniciais'
+  ),
+  (
+    'CELIN-FB01',
+    'Atividade de Facebook - Conceitos Iniciais',
+    '10',
+    'Conceitos Iniciais'
+  );
+
+/*Questão = { id, atividade_prática_curso, atividade_prática_nome, nro, pergunta*, alt1*, alt2*, alt3, alt4, alt_correta* }*/
+INSERT INTO
+  questao
+VALUES
+  (
+    '1',
+    'CELIN-WA01',
+    'Atividade de WhatsApp - Conceitos Iniciais',
+    '1',
+    'O que é o WhatsApp?',
+    'Um aplicativo de mensagem',
+    'Um aplicativo de musica',
+    'Um aplicativo de video',
+    'Um aplicativo de taxi',
+    'a'
+  ),
+  (
+    '2',
+    'CELIN-FB01',
+    'Atividade de Facebook - Conceitos Iniciais',
+    '1',
+    'O que é o Facebook?',
+    'Uma rede social',
+    'Um aplicativo de musica',
+    'Um aplicativo de video',
+    'Um aplicativo de taxi',
+    'a'
+  );
+
+/*AtividadePráticaResposta = { aluno, questão, alternativa }*/
+INSERT INTO
+  atividade_pratica_resposta
+VALUES
+  ('123.456.789-01', '1', 'a'),
+  ('123.456.789-01', '2', 'b');
+
+/*TutoriaPersonalizada = { recurso_pago_curso, recurso_pago_nome, assunto* }*/
+INSERT INTO
+  tutoria_personalizada
+VALUES
+  (
+    'CELIN-WA01',
+    'Tutoria Personalizada WhatsApp',
+    'Conceitos Iniciais'
+  ),
+  (
+    'CELIN-FB01',
+    'Tutoria de Facebook',
+    'Conceitos Iniciais'
+  );
+
+/*Agendamento = { aluno, especialista, data_hora, tutoria_personalizada_curso*, tutoria_personalizada_nome* }*/
+INSERT INTO
+  agendamento
+VALUES
+  (
+    '123.456.789-01',
+    '123.456.789-04',
+    '2021-01-01 10:00:00',
+    'CELIN-WA01',
+    'Tutoria Personalizada WhatsApp'
+  ),
+  (
+    '123.456.789-01',
+    '123.456.789-04',
+    '2021-01-01 10:30:00',
+    'CELIN-FB01',
+    'Tutoria de Facebook'
+  );
+
+/*AlunoAcessoRecursoPago = { aluno, recurso_pago_curso, recurso_pago_nome }*/
+INSERT INTO
+  aluno_acesso_recurso_pago
+VALUES
+  (
+    '123.456.789-01',
+    'CELIN-WA01',
+    'Atividade de WhatsApp - Conceitos Iniciais'
+  ),
+  (
+    '123.456.789-01',
+    'CELIN-WA01',
+    'Tutoria Personalizada WhatsApp'
+  ),
+  (
+    '123.456.789-01',
+    'CELIN-FB01',
+    'Atividade de Facebook - Conceitos Iniciais'
+  ),
+  (
+    '123.456.789-01',
+    'CELIN-FB01',
+    'Tutoria de Facebook'
+  );
+
+/*AdministraRecurso = { recurso_curso, recurso_nome, especialista }*/
+INSERT INTO
+  administra_recurso
+VALUES
+  (
+    'CELIN-WA01',
+    'Atividade de WhatsApp - Conceitos Iniciais',
+    '123.456.789-04'
+  ),
+  (
+    'CELIN-WA01',
+    'Tutoria Personalizada WhatsApp',
+    '123.456.789-04'
+  ),
+  (
+    'CELIN-FB01',
+    'Atividade de Facebook - Conceitos Iniciais',
+    '123.456.789-04'
+  ),
+  (
+    'CELIN-FB01',
+    'Tutoria de Facebook',
+    '123.456.789-04'
+  );
+
+/*AlunoCursa = { aluno, curso, avaliação, nota, data_hora* }*/
+INSERT INTO
+  aluno_cursa
+VALUES
+  (
+    '123.456.789-01',
+    'CELIN-WA01',
+    '10',
+    '10',
+    '2021-01-01 10:00:00'
+  ),
+  (
+    '123.456.789-01',
+    'CELIN-FB01',
+    '10',
+    '10',
+    '2021-01-01 10:00:00'
+  );

@@ -1,4 +1,4 @@
-CREATE TYPE status AS ENUM ('ativo', 'inativo');
+CREATE TYPE STATUS AS ENUM ('ativo', 'inativo');
 
 CREATE TYPE usuario_tipo AS ENUM ('aluno', 'tutor', 'administrador');
 
@@ -8,14 +8,14 @@ CREATE TYPE usuario_tipo AS ENUM ('aluno', 'tutor', 'administrador');
  status*, data_último_acesso, data_última_edição }
  */
 CREATE TABLE usuario (
-  cpf CHAR(14),
+  cpf CHAR(14) NOT NULL,
   nome VARCHAR(50) NOT NULL,
   email VARCHAR(50) NOT NULL,
   senha VARCHAR(30) NOT NULL,
   tipo usuario_tipo NOT NULL,
   data_nasc DATE NOT NULL,
   endereco VARCHAR(255) NOT NULL,
-  telefone VARCHAR(14) NOT NULL,
+  telefone VARCHAR(15) NOT NULL,
   idioma1 VARCHAR(20) NOT NULL,
   idioma2 VARCHAR(20),
   url_foto_perfil VARCHAR(255),
@@ -24,9 +24,10 @@ CREATE TABLE usuario (
   cartao_cred_cvv VARCHAR(3),
   cartao_cred_cpf CHAR(14),
   cartao_cred_titular VARCHAR(50),
-  status status NOT NULL,
+  STATUS STATUS NOT NULL,
   data_ultimo_acesso TIMESTAMP,
   data_ultima_edicao TIMESTAMP,
+  CONSTRAINT unique_email UNIQUE (email),
   CONSTRAINT pk_usuario PRIMARY KEY (cpf),
   CONSTRAINT cpf_formato CHECK (
     cartao_cred_cpf ~ '^[0-9]{3}\.[0-9]{3}\.[0-9]{3}\-[0-9]{2}$'
@@ -47,7 +48,7 @@ CREATE TABLE usuario (
 
 /*Aluno = { usuário, assinante* }*/
 CREATE TABLE aluno (
-  usuario CHAR(14),
+  usuario CHAR(14) NOT NULL,
   assinante BOOLEAN NOT NULL,
   CONSTRAINT pk_aluno PRIMARY KEY (usuario),
   CONSTRAINT fk_aluno_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf)
@@ -55,13 +56,13 @@ CREATE TABLE aluno (
 
 /*Administrador = { usuário, nível_acesso* }*/
 CREATE TABLE administrador (
-  usuario CHAR(14),
+  usuario CHAR(14) NOT NULL,
   nivel_acesso INTEGER NOT NULL,
   CONSTRAINT pk_administrador PRIMARY KEY (usuario),
   CONSTRAINT fk_administrador_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf)
 );
 
-CREATE TYPE tipo_tutor as ENUM ('voluntario', 'especialista');
+CREATE TYPE tipo_tutor AS ENUM ('voluntario', 'especialista');
 
 /*Tutor = { usuário, tipo*, cadastrado_por* }*/
 CREATE TABLE tutor (
@@ -75,7 +76,7 @@ CREATE TABLE tutor (
 
 /*Interesse = { aluno, interesse }*/
 CREATE TABLE interesse (
-  aluno CHAR(14),
+  aluno CHAR(14) NOT NULL,
   interesse VARCHAR(50) NOT NULL,
   CONSTRAINT pk_interesse PRIMARY KEY (aluno, interesse),
   CONSTRAINT fk_interesse_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario)
@@ -83,8 +84,8 @@ CREATE TABLE interesse (
 
 /*AdministradorAtividade = { administrador, log*,  data_hora* }*/
 CREATE TABLE administrador_atividade (
-  administrador CHAR(14),
-  log TEXT,
+  administrador CHAR(14) NOT NULL,
+  log TEXT NOT NULL,
   data_hora TIMESTAMP NOT NULL,
   CONSTRAINT pk_administrador_atividade PRIMARY KEY (administrador, data_hora),
   CONSTRAINT fk_administrador_atividade_administrador FOREIGN KEY (administrador) REFERENCES administrador(usuario)
@@ -92,7 +93,7 @@ CREATE TABLE administrador_atividade (
 
 /*TutorHabilidade = { tutor, habilidade }*/
 CREATE TABLE tutor_habilidade (
-  tutor CHAR(14),
+  tutor CHAR(14) NOT NULL,
   habilidade VARCHAR(50) NOT NULL,
   CONSTRAINT pk_tutor_habilidade PRIMARY KEY (tutor, habilidade),
   CONSTRAINT fk_tutor_habilidade_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario)
@@ -100,8 +101,8 @@ CREATE TABLE tutor_habilidade (
 
 /*TutorAvaliação = { tutor, aluno, avaliação*, data_hora* }*/
 CREATE TABLE tutor_avaliacao (
-  tutor CHAR(14),
-  aluno CHAR(14),
+  tutor CHAR(14) NOT NULL,
+  aluno CHAR(14) NOT NULL,
   avaliacao INTEGER NOT NULL,
   data_hora TIMESTAMP NOT NULL,
   CONSTRAINT pk_tutor_avaliacao PRIMARY KEY (tutor, aluno, data_hora),
@@ -111,7 +112,7 @@ CREATE TABLE tutor_avaliacao (
 
 /*Voluntário = { tutor, motivação }*/
 CREATE TABLE voluntario (
-  tutor CHAR(14),
+  tutor CHAR(14) NOT NULL,
   motivacao TEXT,
   CONSTRAINT pk_voluntario PRIMARY KEY (tutor),
   CONSTRAINT fk_voluntario_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario)
@@ -119,9 +120,9 @@ CREATE TABLE voluntario (
 
 /*Especialista = { tutor, taxa*, currículo_acadêmico*, conta_nro_banco*, conta_agência*, conta_nro* }*/
 CREATE TABLE especialista (
-  tutor CHAR(14),
+  tutor CHAR(14) NOT NULL,
   taxa DECIMAL(10, 2) NOT NULL,
-  curriculo_academico TEXT,
+  curriculo_academico TEXT NOT NULL,
   conta_nro_banco VARCHAR(20),
   conta_agencia VARCHAR(20),
   conta_nro VARCHAR(20),
@@ -129,21 +130,12 @@ CREATE TABLE especialista (
   CONSTRAINT fk_especialista_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario)
 );
 
-/*AtividadePráticaResposta = { aluno, questão, alternativa }*/
-CREATE TABLE atividade_pratica_resposta (
-  aluno CHAR(14),
-  questao INTEGER NOT NULL,
-  alternativa char(1),
-  CONSTRAINT pk_atividade_pratica_resposta PRIMARY KEY (aluno, questao),
-  CONSTRAINT fk_atividade_pratica_resposta_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario)
-);
-
 /*Mensagem = { aluno1, aluno2, data_hora, conteudo }*/
 CREATE TABLE mensagem (
-  aluno1 CHAR(14),
-  aluno2 CHAR(14),
+  aluno1 CHAR(14) NOT NULL,
+  aluno2 CHAR(14) NOT NULL,
   data_hora TIMESTAMP NOT NULL,
-  conteudo TEXT,
+  conteudo TEXT NOT NULL,
   CONSTRAINT pk_mensagem PRIMARY KEY (aluno1, aluno2, data_hora),
   CONSTRAINT fk_mensagem_aluno1 FOREIGN KEY (aluno1) REFERENCES aluno(usuario),
   CONSTRAINT fk_mensagem_aluno2 FOREIGN KEY (aluno2) REFERENCES aluno(usuario)
@@ -151,22 +143,22 @@ CREATE TABLE mensagem (
 
 /*Curso = { código, título*, categoria*, descrição*, nível_dificuldade*, média_aval, criado_por* }*/
 CREATE TABLE curso (
-  codigo CHAR(10),
+  codigo CHAR(10) NOT NULL,
   titulo VARCHAR(100) NOT NULL,
   categoria CHAR(30) NOT NULL,
-  descricao TEXT,
-  nivel_dificuldade INTEGER,
+  descricao TEXT NOT NULL,
+  nivel_dificuldade INTEGER NOT NULL,
   media_aval DECIMAL(2, 1),
-  criado_por VARCHAR(14),
+  criado_por VARCHAR(14) NOT NULL,
   CONSTRAINT pk_curso PRIMARY KEY (codigo),
-  CONSTRAINT fk_curso_criado_por FOREIGN KEY (criado_por) REFERENCES administrador(usuario),
+  CONSTRAINT fk_curso_criado_por FOREIGN KEY (criado_por) REFERENCES especialista(tutor),
   CONSTRAINT chk_nivel_dificuldade CHECK (
     nivel_dificuldade BETWEEN 1
     AND 10
   )
 );
 
-CREATE TYPE recurso_tipo as ENUM ('pago', 'comum');
+CREATE TYPE recurso_tipo AS ENUM ('pago', 'comum');
 
 /*Recurso = { curso, nome, descrição, tipo* }*/
 CREATE TABLE recurso (
@@ -178,7 +170,7 @@ CREATE TABLE recurso (
   CONSTRAINT fk_recurso_curso FOREIGN KEY (curso) REFERENCES curso(codigo)
 );
 
-CREATE TYPE recurso_pago_tipo as ENUM ('videotutorial', 'atividade_pratica');
+CREATE TYPE recurso_pago_tipo AS ENUM ('tutoria_personalizada', 'atividade_pratica');
 
 /*RecursoPago = { recurso_curso, recurso_nome, preço_único*, tipo* }*/
 CREATE TABLE recurso_pago (
@@ -187,25 +179,29 @@ CREATE TABLE recurso_pago (
   preco_unico DECIMAL(10, 2) NOT NULL,
   tipo recurso_pago_tipo NOT NULL,
   CONSTRAINT pk_recurso_pago PRIMARY KEY (recurso_curso, recurso_nome),
-  CONSTRAINT fk_recurso_pago_recurso foreign key (recurso_curso, recurso_nome) references recurso(curso, nome)
+  CONSTRAINT fk_recurso_pago_recurso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome)
 );
 
-/*Vídeotutorial = { recurso_curso, recurso_nome, duração* }*/
+/*Vídeotutorial = { recurso_curso, recurso_nome, url*, duração* }*/
 CREATE TABLE videotutorial (
   recurso_curso CHAR(10),
   recurso_nome VARCHAR(50),
+  url VARCHAR(255) NOT NULL,
   duracao INTERVAL NOT NULL,
   CONSTRAINT pk_videotutorial PRIMARY KEY (recurso_curso, recurso_nome),
-  CONSTRAINT fk_videdotutorial_recurso foreign key (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome)
+  CONSTRAINT fk_videdotutorial_recurso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome)
 );
 
-/*Guia = { recurso_curso, recurso_nome, formato* }*/
+/*Guia = { recurso_curso, recurso_nome, formato*, url }*/
 CREATE TABLE guia (
   recurso_curso char(10),
   recurso_nome VARCHAR(50),
   formato char(3) NOT NULL,
+  url VARCHAR(255) NOT NULL,
   CONSTRAINT pk_guia PRIMARY KEY (recurso_curso, recurso_nome),
-  CONSTRAINT fk_guia_recurso_curso foreign key (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome)
+  CONSTRAINT fk_guia_recurso_curso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome),
+  -- formato has to be (pdf, doc, docx, odt, txt, rtf)
+  CONSTRAINT formato_formato CHECK (formato ~ '^(pdf|doc|docx|odt|txt|rtf)$')
 );
 
 /*AtividadePrática = { recurso_pago_curso, recurso_pago_nome, duração, assunto*  }*/
@@ -213,7 +209,7 @@ CREATE TABLE atividade_pratica (
   recurso_pago_curso CHAR(10),
   recurso_pago_nome VARCHAR(50),
   duracao INTERVAL,
-  assunto VARCHAR(50) NOT NULL,
+  assunto VARCHAR(80) NOT NULL,
   CONSTRAINT pk_atividade_pratica PRIMARY KEY (recurso_pago_curso, recurso_pago_nome),
   CONSTRAINT fk_atividade_pratica_recurso_pago FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome)
 );
@@ -229,9 +225,21 @@ CREATE TABLE questao (
   alt2 TEXT NOT NULL,
   alt3 TEXT,
   alt4 TEXT,
-  alt_correta VARCHAR(1) NOT null,
+  alt_correta CHAR(1) NOT NULL,
   CONSTRAINT pk_questao PRIMARY KEY (id),
-  CONSTRAINT fk_questao_atividade_pratica FOREIGN KEY (atividade_pratica_curso, atividade_pratica_nome) REFERENCES atividade_pratica(recurso_pago_curso, recurso_pago_nome)
+  CONSTRAINT fk_questao_atividade_pratica FOREIGN KEY (atividade_pratica_curso, atividade_pratica_nome) REFERENCES atividade_pratica(recurso_pago_curso, recurso_pago_nome),
+  CONSTRAINT alternativa_correta_formato CHECK (alt_correta ~ '^[a-d]$')
+);
+
+/*AtividadePráticaResposta = { aluno, questão, alternativa }*/
+CREATE TABLE atividade_pratica_resposta (
+  aluno CHAR(14) NOT NULL,
+  questao SERIAL NOT NULL,
+  alternativa char(1) NOT NULL,
+  CONSTRAINT pk_atividade_pratica_resposta PRIMARY KEY (aluno, questao),
+  CONSTRAINT fk_atividade_pratica_resposta_questao FOREIGN KEY (questao) REFERENCES questao(id),
+  CONSTRAINT fk_atividade_pratica_resposta_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario),
+  CONSTRAINT alternativa_formato CHECK (alternativa ~ '^[a-d]$')
 );
 
 /*TutoriaPersonalizada = { recurso_pago_curso, recurso_pago_nome, assunto* }*/
@@ -240,7 +248,7 @@ CREATE TABLE tutoria_personalizada (
   recurso_pago_nome VARCHAR(50),
   assunto VARCHAR(50) NOT NULL,
   CONSTRAINT pk_tutoria_personalizada PRIMARY KEY (recurso_pago_curso, recurso_pago_nome),
-  CONSTRAINT fk_tutoria_personalizada_pk foreign key (recurso_pago_curso, recurso_pago_nome) references recurso_pago(recurso_curso, recurso_nome)
+  CONSTRAINT fk_tutoria_personalizada_pk FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome)
 );
 
 /*Agendamento = { aluno, especialista, data_hora, tutoria_personalizada_curso*, tutoria_personalizada_nome* }*/
@@ -288,7 +296,7 @@ CREATE TABLE aluno_cursa (
   data_hora TIMESTAMP NOT NULL,
   CONSTRAINT pk_aluno_cursa PRIMARY KEY (aluno, curso),
   CONSTRAINT fk_aluno_cursa_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario),
-  CONSTRAINT fk_aluno_cursa_curso FOREIGN KEY (curso) REFERENCES curso(codigo)
+  CONSTRAINT fk_aluno_cursa_curso FOREIGN KEY (curso) REFERENCES curso(codigo) -- constraint de avaliacao e nota
 );
 
 /*Tutoria = { curso, voluntário }*/

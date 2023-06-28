@@ -7,3 +7,7 @@ venv/
 
 # Byte-compiled files
 __pycache__/
+
+# Editor
+.idea/
+.vscode/
