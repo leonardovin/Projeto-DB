@@ -3,7 +3,7 @@ from prettytable import from_db_cursor
 from util import press_enter_message, print_error
 
 
-def list(connection, cursor):
+def list(connection):
     try:
         query = '''
             SELECT
@@ -14,14 +14,14 @@ def list(connection, cursor):
             FROM aluno AS A JOIN usuario AS U ON A.usuario = U.cpf
             '''
 
-        cursor.execute(query)
-        connection.commit()
+        with connection.cursor() as cursor:
+            cursor.execute(query)
 
-        if cursor.rowcount > 0:
-            print('Alunos:')
-            print(from_db_cursor(cursor))
-        else:
-            print('Ainda não há alunos cadastrados.')
+            if cursor.rowcount > 0:
+                print('Alunos:')
+                print(from_db_cursor(cursor))
+            else:
+                print('Ainda não há alunos cadastrados.')
     except Exception as e:
         connection.rollback()
         print_error(e)
@@ -29,7 +29,7 @@ def list(connection, cursor):
     press_enter_message()
 
 
-def create(connection, cursor, student):
+def create(connection, student):
     insert_user_query = '''
         INSERT INTO usuario (cpf, nome, email, senha, tipo, data_nasc,
             endereco, telefone, idioma1, status)
@@ -40,11 +40,9 @@ def create(connection, cursor, student):
     insert_student_query = 'INSERT INTO aluno(usuario, assinante) VALUES (%s, %s)'
 
     try:
-        # print(tuple(student.values()))
-
-        cursor.execute(insert_user_query, student)
-        cursor.execute(insert_student_query, (student['cpf'], False))
-        connection.commit()
+        with connection.cursor() as cursor:
+            cursor.execute(insert_user_query, student)
+            cursor.execute(insert_student_query, (student['cpf'], False))
 
         print('\nAluno inserido com sucesso.\n')
         press_enter_message()

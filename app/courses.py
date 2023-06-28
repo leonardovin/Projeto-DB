@@ -4,7 +4,7 @@ from datetime import datetime
 from util import press_enter_message, print_error
 
 
-def list(connection, cursor):
+def list(connection):
     try:
         query = '''
             SELECT
@@ -18,14 +18,14 @@ def list(connection, cursor):
             FROM curso
             '''
 
-        cursor.execute(query)
-        connection.commit()
+        with connection.cursor() as cursor:
+            cursor.execute(query)
 
-        if cursor.rowcount > 0:
-            print('Cursos:')
-            print(from_db_cursor(cursor))
-        else:
-            print('Ainda não há cursos cadastrados.')
+            if cursor.rowcount > 0:
+                print('Cursos:')
+                print(from_db_cursor(cursor))
+            else:
+                print('Ainda não há cursos cadastrados.')
     except Exception as e:
         connection.rollback()
         print_error(e)
@@ -33,7 +33,7 @@ def list(connection, cursor):
     press_enter_message()
 
 
-def search(connection, cursor, key):
+def search(connection, key):
     try:
         query = '''
             SELECT
@@ -47,14 +47,14 @@ def search(connection, cursor, key):
             FROM curso WHERE codigo = %s OR titulo = %s
             '''
 
-        cursor.execute(query, (key, key))
-        connection.commit()
+        with connection.cursor() as cursor:
+            cursor.execute(query, (key, key))
 
-        if cursor.rowcount > 0:
-            print(f'{cursor.rowcount} resultado(s) para a busca pelo curso "{key}":')
-            print(from_db_cursor(cursor))
-        else:
-            print(f'Não foi possível encontrar nenhum curso "{key}".')
+            if cursor.rowcount > 0:
+                print(f'{cursor.rowcount} resultado(s) para a busca pelo curso "{key}":')
+                print(from_db_cursor(cursor))
+            else:
+                print(f'Não foi possível encontrar nenhum curso "{key}".')
     except Exception as e:
         connection.rollback()
         print_error(e)
@@ -62,7 +62,7 @@ def search(connection, cursor, key):
     press_enter_message()
 
 
-def list_students(connection, cursor, course):
+def list_students(connection, course):
     try:
         query = '''
             SELECT
@@ -77,15 +77,14 @@ def list_students(connection, cursor, course):
             JOIN usuario AS U ON A.usuario = U.cpf
             WHERE AC.curso = %s
             '''
+        with connection.cursor() as cursor:
+            cursor.execute(query, (course,))
 
-        cursor.execute(query, (course,))
-        connection.commit()
-
-        if cursor.rowcount > 0:
-            print(f'Alunos do curso {course}:')
-            print(from_db_cursor(cursor))
-        else:
-            print('Ainda não há alunos cadastrados neste curso. Não se esqueça de verificar se o curso existe.')
+            if cursor.rowcount > 0:
+                print(f'Alunos do curso {course}:')
+                print(from_db_cursor(cursor))
+            else:
+                print('Ainda não há alunos cadastrados neste curso. Não se esqueça de verificar se o curso existe.')
     except Exception as e:
         connection.rollback()
         print_error(e)
@@ -93,12 +92,12 @@ def list_students(connection, cursor, course):
     press_enter_message()
 
 
-def insert_student(connection, cursor, course, student):
+def insert_student(connection, course, student):
     query = 'INSERT INTO aluno_cursa(aluno, curso, data_hora) VALUES (%s, %s, %s)'
 
     try:
-        cursor.execute(query, (student, course, datetime.now()))
-        connection.commit()
+        with connection.cursor() as cursor:
+            cursor.execute(query, (student, course, datetime.now()))
         print(f'\nAluno {student} inserido no curso {course} com sucesso.\n')
     except psycopg2.errors.UniqueViolation as e:
         connection.rollback()
