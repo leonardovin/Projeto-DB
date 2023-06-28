@@ -3,32 +3,8 @@
  cartão_cred_nro, cartão_cred_validade, cartão_cred_cvv, cartão_cred_cpf, cartão_cred_titular,
  status*, data_último_acesso, data_última_edição }
  */
-/*Aluno = { usuário, assinante* }*/
-/*Administrador = { usuário, nível_acesso* }*/
-/*Tutor = { usuário, tipo*, cadastrado_por* }*/
-/*Interesse = { aluno, interesse }*/
-/*AdministradorAtividade = { administrador, log*,  data_hora* }*/
-/*TutorHabilidade = { tutor, habilidade }*/
-/*TutorAvaliação = { tutor, aluno, avaliação*, data_hora* }*/
-/*Voluntário = { tutor, motivação }*/
-/*Especialista = { tutor, taxa*, currículo_acadêmico*, conta_nro_banco*, conta_agência*, conta_nro* }*/
-/*AtividadePráticaResposta = { aluno, questão, alternativa }*/
-/*Mensagem = { aluno1, aluno2, data_hora, conteudo }*/
-/*Curso = { código, título*, categoria*, descrição*, nível_dificuldade*, média_aval, criado_por* }*/
-/*Recurso = { curso, nome, descrição, tipo* }*/
-/*RecursoPago = { recurso_curso, recurso_nome, preço_único*, tipo* }*/
-/*Vídeotutorial = { recurso_curso, recurso_nome, url*, duração* }*/
-/*Guia = { recurso_curso, recurso_nome, formato* }*/
-/*AtividadePrática = { recurso_pago_curso, recurso_pago_nome, duração, assunto*  }*/
-/*Questão = { id, atividade_prática_curso, atividade_prática_nome, nro, pergunta*, alt1*, alt2*, alt3, alt4, alt_correta* }*/
-/*TutoriaPersonalizada = { recurso_pago_curso, recurso_pago_nome, assunto* }*/
-/*Agendamento = { aluno, especialista, data_hora, tutoria_personalizada_curso*, tutoria_personalizada_nome* }*/
-/*AlunoAcessoRecursoPago = { aluno, recurso_pago_curso, recurso_pago_nome }*/
-/*AdministraRecurso = { recurso_curso, recurso_nome, especialista }*/
-/*AlunoCursa = { aluno, curso, avaliação, nota, data_hora* }*/
-/*Tutoria = { curso, voluntário }*/
 INSERT INTO
-  usuario -- i need 2 admins, 4 tutors, 2 students
+  usuario
 VALUES
   (
     '123.456.789-01',
@@ -199,13 +175,14 @@ VALUES
     '2018-01-01'
   );
 
+/*Aluno = { usuário, assinante* }*/
 INSERT INTO
   aluno
 VALUES
   ('123.456.789-01', 'TRUE'),
   ('123.456.789-05', 'FALSE');
 
--- admin
+/*Administrador = { usuário, nível_acesso* }*/
 INSERT INTO
   administrador
 VALUES
@@ -213,6 +190,7 @@ VALUES
   ('123.456.789-06', '2');
 
 -- tutor voluntario e especialista
+/*Tutor = { usuário, tipo*, cadastrado_por* }*/
 INSERT INTO
   tutor
 VALUES
@@ -227,6 +205,40 @@ VALUES
     '123.456.789-08',
     'especialista',
     '123.456.789-06'
+  );
+
+/*Voluntário = { tutor, motivação }*/
+INSERT INTO
+  voluntario
+VALUES
+  (
+    '123.456.789-07',
+    'Quero ajudar as pessoas a aprenderem a usar o WhatsApp'
+  ),
+  (
+    '123.456.789-03',
+    'Quero ajudar as pessoas a aprenderem a usar o Facebook'
+  );
+
+/*Especialista = { tutor, taxa*, currículo_acadêmico*, conta_nro_banco*, conta_agência*, conta_nro* }*/
+INSERT INTO
+  especialista
+VALUES
+  (
+    '123.456.789-04',
+    '100',
+    'Sou formado em Engenharia de Software',
+    '123456',
+    '1234',
+    '123456789'
+  ),
+  (
+    '123.456.789-08',
+    '100',
+    'Sou formado em Engenharia de Software',
+    '123456',
+    '1234',
+    '123456789'
   );
 
 --interesse
@@ -334,7 +346,6 @@ VALUES
     'Td e vc?'
   );
 
---Curso
 /*Curso = { código, título*, categoria*, descrição*, nível_dificuldade*, média_aval, criado_por* }*/
 INSERT INTO
   curso
