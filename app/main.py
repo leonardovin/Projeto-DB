@@ -4,7 +4,12 @@ import courses
 import students
 from util import clear, input_not_empty, pwinput_not_empty
 
+
 def menu():
+    '''
+    Displays the main menu and handles user input.
+    '''
+
     print('''
     1. Listar todos os cursos
     2. Listar todos os alunos
@@ -51,13 +56,11 @@ def menu():
                 'nome': nome,
                 'email': email,
                 'senha': senha,
-                # 'tipo': 'ALUNO',
                 'tipo': 'aluno',
                 'data_nasc': data_nasc,
                 'endereco': endereco,
                 'telefone': telefone,
                 'idioma1': idioma1,
-                # 'status': 'ATIVO',
                 'status': 'ativo',
             }
 

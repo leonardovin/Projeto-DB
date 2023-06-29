@@ -4,6 +4,15 @@ from util import press_enter_message, print_error
 
 
 def list(connection):
+    '''
+    Retrieves and prints all students from the database.
+
+    Parameters
+    ----------
+    connection : psycopg2.extensions.connection
+        The database connection.
+    '''
+
     try:
         query = '''
             SELECT
@@ -30,6 +39,21 @@ def list(connection):
 
 
 def create(connection, student):
+    '''
+    Creates a new student in the database.
+
+    Parameters
+    ----------
+    connection : psycopg2.extensions.connection
+        The database connection.
+    student : dict
+        The student information.
+    Returns
+    -------
+    bool
+        True if the student was created successfully, False otherwise.
+    '''
+
     insert_user_query = '''
         INSERT INTO usuario (cpf, nome, email, senha, tipo, data_nasc,
             endereco, telefone, idioma1, status)

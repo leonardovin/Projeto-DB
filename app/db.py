@@ -9,6 +9,15 @@ config = {
 
 
 def connect():
+    '''
+    Establishes a connection to the database.
+
+    Returns
+    -------
+    psycopg2.extensions.connection
+        The database connection.
+    '''
+
     try:
         print('Estabelecendo conexão com a base de dados.')
 
@@ -27,5 +36,14 @@ def connect():
 
 
 def close(connection):
+    '''
+    Closes the database connection.
+
+    Parameters
+    ----------
+    connection : psycopg2.extensions.connection
+        The database connection.
+    '''
+
     if connection:
         connection.close()

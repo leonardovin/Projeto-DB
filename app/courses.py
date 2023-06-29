@@ -5,6 +5,15 @@ from util import press_enter_message, print_error
 
 
 def list(connection):
+    '''
+    Retrieves and prints all courses from the database.
+
+    Parameters
+    ----------
+    connection : psycopg2.extensions.connection
+        The database connection.
+    '''
+
     try:
         query = '''
             SELECT
@@ -34,6 +43,17 @@ def list(connection):
 
 
 def search(connection, key):
+    '''
+    Searches for a course in the database based on a key.
+
+    Parameters
+    ----------
+    connection : psycopg2.extensions.connection
+        The database connection.
+    key : str
+        The key to search for (course code or title).
+    '''
+
     try:
         query = '''
             SELECT
@@ -63,6 +83,17 @@ def search(connection, key):
 
 
 def list_students(connection, course):
+    '''
+    Retrieves and prints all students enrolled in a specific course.
+
+    Parameters
+    ----------
+    connection : psycopg2.extensions.connection
+        The database connection.
+    course : str
+        The course code.
+    '''
+
     try:
         query = '''
             SELECT
@@ -77,6 +108,7 @@ def list_students(connection, course):
             JOIN usuario AS U ON A.usuario = U.cpf
             WHERE AC.curso = %s
             '''
+
         with connection.cursor() as cursor:
             cursor.execute(query, (course,))
 
@@ -93,6 +125,19 @@ def list_students(connection, course):
 
 
 def insert_student(connection, course, student):
+    '''
+    Inserts a student into a course.
+
+    Parameters
+    ----------
+    connection : psycopg2.extensions.connection
+        The database connection.
+    course : str
+        The course code.
+    student : str
+        The student's identifier.
+    '''
+
     query = 'INSERT INTO aluno_cursa(aluno, curso, data_hora) VALUES (%s, %s, %s)'
 
     try:
