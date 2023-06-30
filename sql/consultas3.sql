@@ -2,6 +2,7 @@
 SELECT
   -- (CASE WHEN DATE_TRUNC('year', A.data_hora) > '2022-01-01' THEN TO_CHAR(A.data_hora, 'Month') END) AS "Mês", COUNT(*) AS "Agendamentos", COUNT(DISTINCT A.aluno) AS "Alunos Atendidos"
   TO_CHAR(A.data_hora, 'Month') AS "Mês",
+  TO_CHAR(A.data_hora, 'YYYY') AS "Ano",
   COUNT(*) AS "Agendamentos",
   COUNT(DISTINCT A.aluno) AS "Alunos Atendidos"
 FROM
@@ -9,6 +10,7 @@ FROM
   JOIN especialista AS E ON A.especialista = E.tutor -- GROUP BY (CASE WHEN DATE_TRUNC('year', A.data_hora) > '2022-01-01' THEN TO_CHAR(A.data_hora, 'Month') END), A.especialista;
 GROUP BY
   TO_CHAR(A.data_hora, 'Month'),
+  TO_CHAR(A.data_hora, 'YYYY'),
   A.especialista;
 
 -- Seleciona a média de avaliação de tutores de cursos que contenham recurso pago tutoria personalizada e sejam cursados por mais de 5 alunos. Seleciona também a média de avaliação dos cursos
@@ -53,7 +55,7 @@ SELECT
   AVG(
     CASE
       WHEN AC.avaliacao BETWEEN 3
-      AND 8 THEN AC.avaliacao
+      AND 10 THEN AC.avaliacao
     END
   ) AS "Média de Avaliação de Cursos Pelo Usuário",
   AVG(C.media_aval) AS "Média de Avaliação dos Cursos Cursados Pelo Usuário"
