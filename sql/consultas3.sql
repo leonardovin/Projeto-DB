@@ -55,7 +55,7 @@ SELECT
   AVG(
     CASE
       WHEN AC.avaliacao BETWEEN 3
-      AND 10 THEN AC.avaliacao
+      AND 8 THEN AC.avaliacao
     END
   ) AS "Média de Avaliação de Cursos Pelo Usuário",
   AVG(C.media_aval) AS "Média de Avaliação dos Cursos Cursados Pelo Usuário"
