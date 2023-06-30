@@ -16,7 +16,8 @@ GROUP BY
 -- Seleciona a média de avaliação de tutores de cursos que contenham recurso pago tutoria personalizada e sejam cursados por mais de 5 alunos. Seleciona também a média de avaliação dos cursos
 SELECT
   AVG(TA.avaliacao) AS "Média de Avaliação dos Tutores",
-  AVG(C.media_aval) AS "Média de Avaliação dos Cursos"
+  AVG(C.media_aval) AS "Média de Avaliação dos Cursos",
+  C.codigo AS "Codigo do Curso"
 FROM
   tutor_avaliacao AS TA
   JOIN tutor AS T ON TA.tutor = t.usuario
@@ -29,7 +30,7 @@ FROM
 GROUP BY
   C.codigo
 HAVING
-  COUNT(AC.aluno) > 5;
+  COUNT(AC.aluno) > 3;
 
 -- Seleciona a dificuldade média de todos os cursos, e se houver, média das avaliações dos cursos por categoria, assim como a idade média dos alunos que cursam esses cursos
 SELECT
