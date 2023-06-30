@@ -295,40 +295,6 @@ VALUES
     '2018-01-01:00:00:20'
   );
 
-/*Voluntário = { tutor, motivação }*/
-INSERT INTO
-  voluntario
-VALUES
-  (
-    '123.456.789-07',
-    'Quero ajudar as pessoas a aprenderem a usar o WhatsApp'
-  ),
-  (
-    '123.456.789-03',
-    'Quero ajudar as pessoas a aprenderem a usar o Facebook'
-  );
-
-/*Especialista = { tutor, taxa*, currículo_acadêmico*, conta_nro_banco*, conta_agência*, conta_nro* }*/
-INSERT INTO
-  especialista
-VALUES
-  (
-    '123.456.789-04',
-    '100',
-    'Sou formado em Engenharia de Software',
-    '123456',
-    '1234',
-    '123456789'
-  ),
-  (
-    '123.456.789-08',
-    '100',
-    'Sou formado em Engenharia de Software',
-    '123456',
-    '1234',
-    '123456789'
-  );
-
 /*Mensagem = { aluno1, aluno2, data_hora, conteudo }*/
 INSERT INTO
   mensagem
