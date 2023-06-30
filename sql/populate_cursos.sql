@@ -577,7 +577,7 @@ VALUES
     'Categoria 1',
     'Descrição 1',
     1,
-    0.0,
+    8.0,
     '123.456.789-09'
   ),
   (
@@ -586,7 +586,7 @@ VALUES
     'Categoria 2',
     'Descrição 2',
     5,
-    0.0,
+    6.0,
     '123.456.789-10'
   ),
   (
@@ -595,7 +595,7 @@ VALUES
     'Categoria 3',
     'Descrição 3',
     4,
-    0.0,
+    7.0,
     '123.456.789-11'
   ),
   (
@@ -604,7 +604,7 @@ VALUES
     'Categoria 4',
     'Descrição 4',
     4,
-    0.0,
+    5.0,
     '123.456.789-12'
   ),
   (
@@ -613,7 +613,7 @@ VALUES
     'Categoria 5',
     'Descrição 5',
     3,
-    0.0,
+    6.0,
     '123.456.789-13'
   ),
   -- cursos do arnaldo
@@ -623,7 +623,7 @@ VALUES
     'Categoria 6',
     'Descrição 6',
     3,
-    0.0,
+    8.0,
     '123.456.789-19'
   ),
   (
@@ -632,7 +632,7 @@ VALUES
     'Categoria 7',
     'Descrição 7',
     3,
-    0.0,
+    2.0,
     '123.456.789-19'
   ),
   (
@@ -641,7 +641,7 @@ VALUES
     'Categoria 8',
     'Descrição 8',
     3,
-    0.0,
+    3.0,
     '123.456.789-19'
   ),
   (
@@ -650,7 +650,7 @@ VALUES
     'Categoria 9',
     'Descrição 9',
     3,
-    0.0,
+    9.9,
     '123.456.789-19'
   ),
   (
@@ -659,7 +659,7 @@ VALUES
     'Categoria 10',
     'Descrição 10',
     3,
-    0.0,
+    9.9,
     '123.456.789-19'
   );
 
@@ -684,6 +684,34 @@ VALUES
   (
     '123.456.789-20',
     'CELIN-WA07',
+    10,
+    10,
+    '2018-01-01 00:00:00'
+  ),
+  (
+    '123.456.789-20',
+    'CELIN-WA02',
+    10,
+    10,
+    '2018-01-01 00:00:00'
+  ),
+  (
+    '123.456.789-20',
+    'CELIN-WA04',
+    10,
+    10,
+    '2018-01-01 00:00:00'
+  ),
+  (
+    '123.456.789-20',
+    'CELIN-WA05',
+    10,
+    10,
+    '2018-01-01 00:00:00'
+  ),
+  (
+    '123.456.789-20',
+    'CELIN-WA06',
     10,
     10,
     '2018-01-01 00:00:00'
@@ -750,4 +778,211 @@ VALUES
     10,
     10,
     '2018-01-01 00:00:00'
+  );
+
+-- tutorias personalizadas
+/*TutoriaPersonalizada = { recurso_pago_curso, recurso_pago_nome, assunto* }*/
+/*Agendamento = { aluno, especialista, data_hora, tutoria_personalizada_curso*, tutoria_personalizada_nome* }*/
+/*AdministraRecurso = { recurso_curso, recurso_nome, especialista }*/
+/*AlunoAcessoRecursoPago = { aluno, recurso_pago_curso, recurso_pago_nome }*/
+/*RecursoPago = { recurso_curso, recurso_nome, preço_único*, tipo* }*/
+/*Recurso = { curso, nome, descrição, tipo* }*/
+-- inserir recursos do tipo pago com nome tutoria personalizada de curso para os cursos CELIN-WA06 até CELIN-WA11
+INSERT INTO
+  recurso
+VALUES
+  (
+    'CELIN-WA06',
+    'Tutoria Personalizada de Curso6',
+    'Tutoria Personalizada de Curso',
+    'pago'
+  ),
+  (
+    'CELIN-WA07',
+    'Tutoria Personalizada de Curso7',
+    'Tutoria Personalizada de Curso',
+    'pago'
+  ),
+  (
+    'CELIN-WA08',
+    'Tutoria Personalizada de Curso8',
+    'Tutoria Personalizada de Curso',
+    'pago'
+  ),
+  (
+    'CELIN-WA09',
+    'Tutoria Personalizada de Curso9',
+    'Tutoria Personalizada de Curso',
+    'pago'
+  ),
+  (
+    'CELIN-WA10',
+    'Tutoria Personalizada de Curso10',
+    'Tutoria Personalizada de Curso',
+    'pago'
+  ),
+  (
+    'CELIN-WA11',
+    'Tutoria Personalizada de Curso11',
+    'Tutoria Personalizada de Curso',
+    'pago'
+  );
+
+-- inserir os recursos acima em recurso_pago
+INSERT INTO
+  recurso_pago
+VALUES
+  (
+    'CELIN-WA06',
+    'Tutoria Personalizada de Curso6',
+    9.9,
+    'tutoria_personalizada'
+  ),
+  (
+    'CELIN-WA07',
+    'Tutoria Personalizada de Curso7',
+    9.9,
+    'tutoria_personalizada'
+  ),
+  (
+    'CELIN-WA08',
+    'Tutoria Personalizada de Curso8',
+    9.9,
+    'tutoria_personalizada'
+  ),
+  (
+    'CELIN-WA09',
+    'Tutoria Personalizada de Curso9',
+    9.9,
+    'tutoria_personalizada'
+  ),
+  (
+    'CELIN-WA10',
+    'Tutoria Personalizada de Curso10',
+    9.9,
+    'tutoria_personalizada'
+  ),
+  (
+    'CELIN-WA11',
+    'Tutoria Personalizada de Curso11',
+    9.9,
+    'tutoria_personalizada'
+  );
+
+-- inserir os recursos acima em tutoria_personalizada
+INSERT INTO
+  tutoria_personalizada
+VALUES
+  (
+    'CELIN-WA06',
+    'Tutoria Personalizada de Curso6',
+    'Tutoria Personalizada de Curso'
+  ),
+  (
+    'CELIN-WA07',
+    'Tutoria Personalizada de Curso7',
+    'Tutoria Personalizada de Curso'
+  ),
+  (
+    'CELIN-WA08',
+    'Tutoria Personalizada de Curso8',
+    'Tutoria Personalizada de Curso'
+  ),
+  (
+    'CELIN-WA09',
+    'Tutoria Personalizada de Curso9',
+    'Tutoria Personalizada de Curso'
+  ),
+  (
+    'CELIN-WA10',
+    'Tutoria Personalizada de Curso10',
+    'Tutoria Personalizada de Curso'
+  ),
+  (
+    'CELIN-WA11',
+    'Tutoria Personalizada de Curso11',
+    'Tutoria Personalizada de Curso'
+  );
+
+/*Agendamento = { aluno, especialista, data_hora, tutoria_personalizada_curso*, tutoria_personalizada_nome* }*/
+-- inserir em agendamento os alunos de cursos com tutorias personalizadas criadas acima
+INSERT INTO
+  agendamento
+VALUES
+  (
+    '876.543.210-34',
+    '123.456.789-09',
+    '2018-01-01 00:00:00',
+    'CELIN-WA06',
+    'Tutoria Personalizada de Curso6'
+  ),
+  (
+    '876.543.210-34',
+    '123.456.789-09',
+    '2018-01-01 00:20:00',
+    'CELIN-WA07',
+    'Tutoria Personalizada de Curso7'
+  ),
+  (
+    '876.543.210-34',
+    '123.456.789-09',
+    '2018-01-01 00:30:00',
+    'CELIN-WA08',
+    'Tutoria Personalizada de Curso8'
+  ),
+  (
+    '876.543.210-34',
+    '123.456.789-09',
+    '2018-01-01 00:40:00',
+    'CELIN-WA09',
+    'Tutoria Personalizada de Curso9'
+  ),
+  (
+    '876.543.210-34',
+    '123.456.789-09',
+    '2018-01-01 00:50:00',
+    'CELIN-WA10',
+    'Tutoria Personalizada de Curso10'
+  ),
+  (
+    '876.543.210-34',
+    '123.456.789-09',
+    '2018-01-01 00:55:00',
+    'CELIN-WA11',
+    'Tutoria Personalizada de Curso11'
+  );
+
+-- inserir em administra_recurso o especialista 123.456.789-09 em cada curso com tutoria personalizada criado acima
+INSERT INTO
+  administra_recurso
+VALUES
+  (
+    'CELIN-WA06',
+    'Tutoria Personalizada de Curso6',
+    '123.456.789-09'
+  ),
+  (
+    'CELIN-WA07',
+    'Tutoria Personalizada de Curso7',
+    '123.456.789-09'
+  ),
+  (
+    'CELIN-WA08',
+    'Tutoria Personalizada de Curso8',
+    '123.456.789-09'
+  ),
+  (
+    'CELIN-WA09',
+    'Tutoria Personalizada de Curso9',
+    '123.456.789-09'
+  ),
+  (
+    'CELIN-WA10',
+    'Tutoria Personalizada de Curso10',
+    '123.456.789-09'
+  ),
+  (
+    'CELIN-WA11',
+    'Tutoria Personalizada de Curso11',
+    '123.456.789-09'
   );
