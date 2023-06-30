@@ -1,13 +1,12 @@
 -- Selecionar número de agendamentos de tutores por período de tempo e o número de alunos atendidos no período
 SELECT
-  -- (CASE WHEN DATE_TRUNC('year', A.data_hora) > '2022-01-01' THEN TO_CHAR(A.data_hora, 'Month') END) AS "Mês", COUNT(*) AS "Agendamentos", COUNT(DISTINCT A.aluno) AS "Alunos Atendidos"
   TO_CHAR(A.data_hora, 'Month') AS "Mês",
   TO_CHAR(A.data_hora, 'YYYY') AS "Ano",
   COUNT(*) AS "Agendamentos",
   COUNT(DISTINCT A.aluno) AS "Alunos Atendidos"
 FROM
   agendamento AS A
-  JOIN especialista AS E ON A.especialista = E.tutor -- GROUP BY (CASE WHEN DATE_TRUNC('year', A.data_hora) > '2022-01-01' THEN TO_CHAR(A.data_hora, 'Month') END), A.especialista;
+  JOIN especialista AS E ON A.especialista = E.tutor
 GROUP BY
   TO_CHAR(A.data_hora, 'Month'),
   TO_CHAR(A.data_hora, 'YYYY'),
@@ -72,33 +71,35 @@ ORDER BY
 
 -- Seleciona alunos que cursam todos os cursos tutorados pelo tutor voluntário Arnaldo
 SELECT
-  A.usuario
+  a.usuario
 FROM
-  aluno AS A
+  aluno a
+  JOIN aluno_cursa ac ON a.usuario = ac.aluno
+  JOIN tutoria t ON ac.curso = t.curso
+  JOIN voluntario v ON t.voluntario = v.tutor
+  JOIN usuario u ON a.usuario = u.cpf
 WHERE
-  NOT EXISTS (
+  v.tutor = (
     SELECT
-      *
+      tutor
     FROM
-      curso AS C
+      voluntario
+      JOIN tutor tu ON voluntario.tutor = tu.usuario
+      JOIN usuario us ON tu.usuario = us.cpf
     WHERE
-      C.codigo NOT IN (
-        SELECT
-          T.curso
-        FROM
-          tutoria AS T
-          INNER JOIN tutor AS TU ON T.voluntario = TU.usuario
-          INNER JOIN usuario AS U ON TU.usuario = U.cpf
-        WHERE
-          u.nome = 'Arnaldo'
-      )
-      AND NOT EXISTS (
-        SELECT
-          *
-        FROM
-          aluno_cursa AS AC
-        WHERE
-          AC.aluno = A.usuario
-          AND AC.curso = C.codigo
-      )
+      us.nome = 'Tutor 9'
+  )
+GROUP BY
+  a.usuario
+HAVING
+  COUNT(DISTINCT ac.curso) = (
+    SELECT
+      COUNT(DISTINCT t.curso)
+    FROM
+      tutoria t
+      JOIN voluntario v ON t.voluntario = v.tutor
+      JOIN tutor tu ON v.tutor = tu.usuario
+      JOIN usuario us ON tu.usuario = us.cpf
+    WHERE
+      us.nome = 'Tutor 9'
   );

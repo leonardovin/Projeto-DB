@@ -51,7 +51,7 @@ CREATE TABLE aluno (
   usuario CHAR(14) NOT NULL,
   assinante BOOLEAN NOT NULL,
   CONSTRAINT pk_aluno PRIMARY KEY (usuario),
-  CONSTRAINT fk_aluno_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf)
+  CONSTRAINT fk_aluno_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf) ON DELETE CASCADE
 );
 
 /*Administrador = { usuário, nível_acesso* }*/
@@ -59,7 +59,7 @@ CREATE TABLE administrador (
   usuario CHAR(14) NOT NULL,
   nivel_acesso INTEGER NOT NULL,
   CONSTRAINT pk_administrador PRIMARY KEY (usuario),
-  CONSTRAINT fk_administrador_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf)
+  CONSTRAINT fk_administrador_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf) ON DELETE CASCADE
 );
 
 CREATE TYPE tipo_tutor AS ENUM ('voluntario', 'especialista');
@@ -70,8 +70,8 @@ CREATE TABLE tutor (
   tipo tipo_tutor NOT NULL,
   cadastrado_por CHAR(14) NOT NULL,
   CONSTRAINT pk_tutor PRIMARY KEY (usuario),
-  CONSTRAINT fk_tutor_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf),
-  CONSTRAINT fk_tutor_cadastrado_por FOREIGN KEY (cadastrado_por) REFERENCES administrador(usuario)
+  CONSTRAINT fk_tutor_usuario FOREIGN KEY (usuario) REFERENCES usuario(cpf) ON DELETE CASCADE,
+  CONSTRAINT fk_tutor_cadastrado_por FOREIGN KEY (cadastrado_por) REFERENCES administrador(usuario) ON DELETE CASCADE
 );
 
 /*Interesse = { aluno, interesse }*/
@@ -79,7 +79,7 @@ CREATE TABLE interesse (
   aluno CHAR(14) NOT NULL,
   interesse VARCHAR(50) NOT NULL,
   CONSTRAINT pk_interesse PRIMARY KEY (aluno, interesse),
-  CONSTRAINT fk_interesse_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario)
+  CONSTRAINT fk_interesse_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario) ON DELETE CASCADE
 );
 
 /*AdministradorAtividade = { administrador, log*,  data_hora* }*/
@@ -88,7 +88,7 @@ CREATE TABLE administrador_atividade (
   log TEXT NOT NULL,
   data_hora TIMESTAMP NOT NULL,
   CONSTRAINT pk_administrador_atividade PRIMARY KEY (administrador, data_hora),
-  CONSTRAINT fk_administrador_atividade_administrador FOREIGN KEY (administrador) REFERENCES administrador(usuario)
+  CONSTRAINT fk_administrador_atividade_administrador FOREIGN KEY (administrador) REFERENCES administrador(usuario) ON DELETE CASCADE
 );
 
 /*TutorHabilidade = { tutor, habilidade }*/
@@ -96,7 +96,7 @@ CREATE TABLE tutor_habilidade (
   tutor CHAR(14) NOT NULL,
   habilidade VARCHAR(50) NOT NULL,
   CONSTRAINT pk_tutor_habilidade PRIMARY KEY (tutor, habilidade),
-  CONSTRAINT fk_tutor_habilidade_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario)
+  CONSTRAINT fk_tutor_habilidade_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario) ON DELETE CASCADE
 );
 
 /*TutorAvaliação = { tutor, aluno, avaliação*, data_hora* }*/
@@ -106,8 +106,8 @@ CREATE TABLE tutor_avaliacao (
   avaliacao INTEGER NOT NULL,
   data_hora TIMESTAMP NOT NULL,
   CONSTRAINT pk_tutor_avaliacao PRIMARY KEY (tutor, aluno, data_hora),
-  CONSTRAINT fk_tutor_avaliacao_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario),
-  CONSTRAINT fk_tutor_avaliacao_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario)
+  CONSTRAINT fk_tutor_avaliacao_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario) ON DELETE CASCADE,
+  CONSTRAINT fk_tutor_avaliacao_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario) ON DELETE CASCADE
 );
 
 /*Voluntário = { tutor, motivação }*/
@@ -115,7 +115,7 @@ CREATE TABLE voluntario (
   tutor CHAR(14) NOT NULL,
   motivacao TEXT,
   CONSTRAINT pk_voluntario PRIMARY KEY (tutor),
-  CONSTRAINT fk_voluntario_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario)
+  CONSTRAINT fk_voluntario_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario) ON DELETE CASCADE
 );
 
 /*Especialista = { tutor, taxa*, currículo_acadêmico*, conta_nro_banco*, conta_agência*, conta_nro* }*/
@@ -127,7 +127,7 @@ CREATE TABLE especialista (
   conta_agencia VARCHAR(20),
   conta_nro VARCHAR(20),
   CONSTRAINT pk_especialista PRIMARY KEY (tutor),
-  CONSTRAINT fk_especialista_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario)
+  CONSTRAINT fk_especialista_tutor FOREIGN KEY (tutor) REFERENCES tutor(usuario) ON DELETE CASCADE
 );
 
 /*Mensagem = { aluno1, aluno2, data_hora, conteudo }*/
@@ -137,8 +137,8 @@ CREATE TABLE mensagem (
   data_hora TIMESTAMP NOT NULL,
   conteudo TEXT NOT NULL,
   CONSTRAINT pk_mensagem PRIMARY KEY (aluno1, aluno2, data_hora),
-  CONSTRAINT fk_mensagem_aluno1 FOREIGN KEY (aluno1) REFERENCES aluno(usuario),
-  CONSTRAINT fk_mensagem_aluno2 FOREIGN KEY (aluno2) REFERENCES aluno(usuario)
+  CONSTRAINT fk_mensagem_aluno1 FOREIGN KEY (aluno1) REFERENCES aluno(usuario) ON DELETE CASCADE,
+  CONSTRAINT fk_mensagem_aluno2 FOREIGN KEY (aluno2) REFERENCES aluno(usuario) ON DELETE CASCADE
 );
 
 /*Curso = { código, título*, categoria*, descrição*, nível_dificuldade*, média_aval, criado_por* }*/
@@ -151,7 +151,7 @@ CREATE TABLE curso (
   media_aval DECIMAL(2, 1),
   criado_por VARCHAR(14) NOT NULL,
   CONSTRAINT pk_curso PRIMARY KEY (codigo),
-  CONSTRAINT fk_curso_criado_por FOREIGN KEY (criado_por) REFERENCES especialista(tutor),
+  CONSTRAINT fk_curso_criado_por FOREIGN KEY (criado_por) REFERENCES especialista(tutor) ON DELETE CASCADE,
   CONSTRAINT chk_nivel_dificuldade CHECK (
     nivel_dificuldade BETWEEN 1
     AND 10
@@ -167,7 +167,7 @@ CREATE TABLE recurso (
   descricao TEXT,
   tipo recurso_tipo NOT NULL,
   CONSTRAINT pk_recurso PRIMARY KEY (curso, nome),
-  CONSTRAINT fk_recurso_curso FOREIGN KEY (curso) REFERENCES curso(codigo)
+  CONSTRAINT fk_recurso_curso FOREIGN KEY (curso) REFERENCES curso(codigo) ON DELETE CASCADE
 );
 
 CREATE TYPE recurso_pago_tipo AS ENUM ('tutoria_personalizada', 'atividade_pratica');
@@ -179,7 +179,7 @@ CREATE TABLE recurso_pago (
   preco_unico DECIMAL(10, 2) NOT NULL,
   tipo recurso_pago_tipo NOT NULL,
   CONSTRAINT pk_recurso_pago PRIMARY KEY (recurso_curso, recurso_nome),
-  CONSTRAINT fk_recurso_pago_recurso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome)
+  CONSTRAINT fk_recurso_pago_recurso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome) ON DELETE CASCADE
 );
 
 /*Vídeotutorial = { recurso_curso, recurso_nome, url*, duração* }*/
@@ -189,7 +189,7 @@ CREATE TABLE videotutorial (
   url VARCHAR(255) NOT NULL,
   duracao INTERVAL NOT NULL,
   CONSTRAINT pk_videotutorial PRIMARY KEY (recurso_curso, recurso_nome),
-  CONSTRAINT fk_videdotutorial_recurso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome)
+  CONSTRAINT fk_videdotutorial_recurso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome) ON DELETE CASCADE
 );
 
 /*Guia = { recurso_curso, recurso_nome, formato*, url }*/
@@ -199,7 +199,7 @@ CREATE TABLE guia (
   formato char(3) NOT NULL,
   url VARCHAR(255) NOT NULL,
   CONSTRAINT pk_guia PRIMARY KEY (recurso_curso, recurso_nome),
-  CONSTRAINT fk_guia_recurso_curso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome),
+  CONSTRAINT fk_guia_recurso_curso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome) ON DELETE CASCADE,
   -- formato has to be (pdf, doc, docx, odt, txt, rtf)
   CONSTRAINT formato_formato CHECK (formato ~ '^(pdf|doc|docx|odt|txt|rtf)$')
 );
@@ -211,7 +211,7 @@ CREATE TABLE atividade_pratica (
   duracao INTERVAL,
   assunto VARCHAR(80) NOT NULL,
   CONSTRAINT pk_atividade_pratica PRIMARY KEY (recurso_pago_curso, recurso_pago_nome),
-  CONSTRAINT fk_atividade_pratica_recurso_pago FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome)
+  CONSTRAINT fk_atividade_pratica_recurso_pago FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome) ON DELETE CASCADE
 );
 
 /*Questão = { id, atividade_prática_curso, atividade_prática_nome, nro, pergunta*, alt1*, alt2*, alt3, alt4, alt_correta* }*/
@@ -227,7 +227,7 @@ CREATE TABLE questao (
   alt4 TEXT,
   alt_correta CHAR(1) NOT NULL,
   CONSTRAINT pk_questao PRIMARY KEY (id),
-  CONSTRAINT fk_questao_atividade_pratica FOREIGN KEY (atividade_pratica_curso, atividade_pratica_nome) REFERENCES atividade_pratica(recurso_pago_curso, recurso_pago_nome),
+  CONSTRAINT fk_questao_atividade_pratica FOREIGN KEY (atividade_pratica_curso, atividade_pratica_nome) REFERENCES atividade_pratica(recurso_pago_curso, recurso_pago_nome) ON DELETE CASCADE,
   CONSTRAINT alternativa_correta_formato CHECK (alt_correta ~ '^[a-d]$')
 );
 
@@ -237,8 +237,8 @@ CREATE TABLE atividade_pratica_resposta (
   questao SERIAL NOT NULL,
   alternativa char(1) NOT NULL,
   CONSTRAINT pk_atividade_pratica_resposta PRIMARY KEY (aluno, questao),
-  CONSTRAINT fk_atividade_pratica_resposta_questao FOREIGN KEY (questao) REFERENCES questao(id),
-  CONSTRAINT fk_atividade_pratica_resposta_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario),
+  CONSTRAINT fk_atividade_pratica_resposta_questao FOREIGN KEY (questao) REFERENCES questao(id) ON DELETE CASCADE,
+  CONSTRAINT fk_atividade_pratica_resposta_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario) ON DELETE CASCADE,
   CONSTRAINT alternativa_formato CHECK (alternativa ~ '^[a-d]$')
 );
 
@@ -248,7 +248,7 @@ CREATE TABLE tutoria_personalizada (
   recurso_pago_nome VARCHAR(50),
   assunto VARCHAR(50) NOT NULL,
   CONSTRAINT pk_tutoria_personalizada PRIMARY KEY (recurso_pago_curso, recurso_pago_nome),
-  CONSTRAINT fk_tutoria_personalizada_pk FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome)
+  CONSTRAINT fk_tutoria_personalizada_pk FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome) ON DELETE CASCADE
 );
 
 /*Agendamento = { aluno, especialista, data_hora, tutoria_personalizada_curso*, tutoria_personalizada_nome* }*/
@@ -259,12 +259,12 @@ CREATE TABLE agendamento (
   tutoria_personalizada_curso CHAR(10),
   tutoria_personalizada_nome VARCHAR(50),
   CONSTRAINT pk_agendamento PRIMARY KEY (aluno, especialista, data_hora),
-  CONSTRAINT fk_agendamento_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario),
-  CONSTRAINT fk_agendamento_especialista FOREIGN KEY (especialista) REFERENCES especialista(tutor),
+  CONSTRAINT fk_agendamento_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario) ON DELETE CASCADE,
+  CONSTRAINT fk_agendamento_especialista FOREIGN KEY (especialista) REFERENCES especialista(tutor) ON DELETE CASCADE,
   CONSTRAINT fk_agendamento_tutoria_personalizada FOREIGN KEY (
     tutoria_personalizada_curso,
     tutoria_personalizada_nome
-  ) REFERENCES tutoria_personalizada(recurso_pago_curso, recurso_pago_nome)
+  ) REFERENCES tutoria_personalizada(recurso_pago_curso, recurso_pago_nome) ON DELETE CASCADE
 );
 
 /*AlunoAcessoRecursoPago = { aluno, recurso_pago_curso, recurso_pago_nome }*/
@@ -273,8 +273,8 @@ CREATE TABLE aluno_acesso_recurso_pago (
   recurso_pago_curso CHAR(10),
   recurso_pago_nome VARCHAR(50),
   CONSTRAINT pk_aluno_acesso_recurso_pago PRIMARY KEY (aluno, recurso_pago_curso, recurso_pago_nome),
-  CONSTRAINT fk_aluno_acesso_recurso_pago_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario),
-  CONSTRAINT fk_aluno_acesso_recurso_pago_recurso_pago FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome)
+  CONSTRAINT fk_aluno_acesso_recurso_pago_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario) ON DELETE CASCADE,
+  CONSTRAINT fk_aluno_acesso_recurso_pago_recurso_pago FOREIGN KEY (recurso_pago_curso, recurso_pago_nome) REFERENCES recurso_pago(recurso_curso, recurso_nome) ON DELETE CASCADE
 );
 
 /*AdministraRecurso = { recurso_curso, recurso_nome, especialista }*/
@@ -283,8 +283,8 @@ CREATE TABLE administra_recurso (
   recurso_nome VARCHAR(50),
   especialista CHAR(14),
   CONSTRAINT pk_administra_recurso PRIMARY KEY (recurso_curso, recurso_nome, especialista),
-  CONSTRAINT fk_administra_recurso_recurso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome),
-  CONSTRAINT fk_administra_recurso_especialista FOREIGN KEY (especialista) REFERENCES especialista(tutor)
+  CONSTRAINT fk_administra_recurso_recurso FOREIGN KEY (recurso_curso, recurso_nome) REFERENCES recurso(curso, nome) ON DELETE CASCADE,
+  CONSTRAINT fk_administra_recurso_especialista FOREIGN KEY (especialista) REFERENCES especialista(tutor) ON DELETE CASCADE
 );
 
 /*AlunoCursa = { aluno, curso, avaliação, nota, data_hora* }*/
@@ -295,8 +295,8 @@ CREATE TABLE aluno_cursa (
   nota INTEGER,
   data_hora TIMESTAMP NOT NULL,
   CONSTRAINT pk_aluno_cursa PRIMARY KEY (aluno, curso),
-  CONSTRAINT fk_aluno_cursa_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario),
-  CONSTRAINT fk_aluno_cursa_curso FOREIGN KEY (curso) REFERENCES curso(codigo) -- constraint de avaliacao e nota
+  CONSTRAINT fk_aluno_cursa_aluno FOREIGN KEY (aluno) REFERENCES aluno(usuario) ON DELETE CASCADE,
+  CONSTRAINT fk_aluno_cursa_curso FOREIGN KEY (curso) REFERENCES curso(codigo) ON DELETE CASCADE
 );
 
 /*Tutoria = { curso, voluntário }*/
@@ -304,6 +304,6 @@ CREATE TABLE tutoria (
   curso CHAR(10),
   voluntario CHAR(14),
   CONSTRAINT pk_tutoria PRIMARY KEY (curso, voluntario),
-  CONSTRAINT fk_tutoria_curso FOREIGN KEY (curso) REFERENCES curso(codigo),
-  CONSTRAINT fk_tutoria_voluntario FOREIGN KEY (voluntario) REFERENCES voluntario(tutor)
+  CONSTRAINT fk_tutoria_curso FOREIGN KEY (curso) REFERENCES curso(codigo) ON DELETE CASCADE,
+  CONSTRAINT fk_tutoria_voluntario FOREIGN KEY (voluntario) REFERENCES voluntario(tutor) ON DELETE CASCADE
 );

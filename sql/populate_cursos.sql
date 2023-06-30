@@ -565,7 +565,6 @@ VALUES
     '123456'
   );
 
--- insert a curso for each especialista above
 /*Curso = { código, título*, categoria*, descrição*, nível_dificuldade*, média_aval, criado_por* }*/
 -- codigo is something like: CELIN-WA01
 INSERT INTO
