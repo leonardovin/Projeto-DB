@@ -12,7 +12,7 @@ GROUP BY
   TO_CHAR(A.data_hora, 'YYYY'),
   A.especialista;
 
--- Seleciona a média de avaliação de tutores de cursos que contenham recurso pago tutoria personalizada e sejam cursados por mais de 5 alunos. Seleciona também a média de avaliação dos cursos
+-- Seleciona a média de avaliação de tutores de cursos que contenham recurso pago tutoria personalizada e sejam cursados por mais de 3 alunos. Seleciona também a média de avaliação dos cursos
 SELECT
   AVG(TA.avaliacao) AS "Média de Avaliação dos Tutores",
   AVG(C.media_aval) AS "Média de Avaliação dos Cursos",
