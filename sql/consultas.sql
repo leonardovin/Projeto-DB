@@ -1,4 +1,4 @@
--- Selecionar número de agendamentos de tutores por período de tempo e o número de alunos atendidos no período
+-- Seleciona número de agendamentos de tutores por período de tempo e o número de alunos atendidos no período
 SELECT
   TO_CHAR(A.data_hora, 'Month') AS "Mês",
   TO_CHAR(A.data_hora, 'YYYY') AS "Ano",
@@ -31,7 +31,7 @@ GROUP BY
 HAVING
   COUNT(AC.aluno) > 3;
 
--- Seleciona a dificuldade média de todos os cursos, e se houver, média das avaliações dos cursos por categoria, assim como a idade média dos alunos que cursam esses cursos
+-- Seleciona a dificuldade média de todos os cursos, e se houver, média das avaliações dos cursos, por categoria, assim como a idade média dos alunos que cursam esses cursos
 SELECT
   C.categoria AS "Categoria",
   TO_CHAR(AVG(C.nivel_dificuldade), 'FM999999999.00') AS "Dificuldade Média",
@@ -69,16 +69,16 @@ GROUP BY
 ORDER BY
   U.nome;
 
--- Seleciona alunos que cursam todos os cursos tutorados pelo tutor voluntário Arnaldo
-SELECT a.usuario
-FROM aluno AS a
+-- Seleciona alunos que cursam todos os cursos tutorados pelo tutor voluntário '123.456.789-20'
+SELECT A.usuario
+FROM aluno AS A
 WHERE NOT EXISTS (
-  SELECT t.curso
-  FROM tutoria AS t
-  WHERE t.voluntario = '123.456.789-18'
-    AND t.curso NOT IN (
-      SELECT ac.curso
-      FROM aluno_cursa AS ac
-      WHERE ac.aluno = a.usuario
+  SELECT T.curso
+  FROM tutoria AS T
+  WHERE T.voluntario = '123.456.789-18'
+    AND T.curso NOT IN (
+      SELECT AC.curso
+      FROM aluno_cursa AS AC
+      WHERE AC.aluno = A.usuario
     )
 );
