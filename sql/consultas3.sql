@@ -70,36 +70,15 @@ ORDER BY
   U.nome;
 
 -- Seleciona alunos que cursam todos os cursos tutorados pelo tutor voluntário Arnaldo
-SELECT
-  a.usuario
-FROM
-  aluno a
-  JOIN aluno_cursa ac ON a.usuario = ac.aluno
-  JOIN tutoria t ON ac.curso = t.curso
-  JOIN voluntario v ON t.voluntario = v.tutor
-  JOIN usuario u ON a.usuario = u.cpf
-WHERE
-  v.tutor = (
-    SELECT
-      tutor
-    FROM
-      voluntario
-      JOIN tutor tu ON voluntario.tutor = tu.usuario
-      JOIN usuario us ON tu.usuario = us.cpf
-    WHERE
-      us.nome = 'Tutor 9'
-  )
-GROUP BY
-  a.usuario
-HAVING
-  COUNT(DISTINCT ac.curso) = (
-    SELECT
-      COUNT(DISTINCT t.curso)
-    FROM
-      tutoria t
-      JOIN voluntario v ON t.voluntario = v.tutor
-      JOIN tutor tu ON v.tutor = tu.usuario
-      JOIN usuario us ON tu.usuario = us.cpf
-    WHERE
-      us.nome = 'Tutor 9'
-  );
+SELECT a.usuario
+FROM aluno AS a
+WHERE NOT EXISTS (
+  SELECT t.curso
+  FROM tutoria AS t
+  WHERE t.voluntario = '123.456.789-18'
+    AND t.curso NOT IN (
+      SELECT ac.curso
+      FROM aluno_cursa AS ac
+      WHERE ac.aluno = a.usuario
+    )
+);
