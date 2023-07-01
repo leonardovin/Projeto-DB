@@ -228,6 +228,11 @@ CREATE TABLE questao (
   alt_correta CHAR(1) NOT NULL,
   CONSTRAINT pk_questao PRIMARY KEY (id),
   CONSTRAINT fk_questao_atividade_pratica FOREIGN KEY (atividade_pratica_curso, atividade_pratica_nome) REFERENCES atividade_pratica(recurso_pago_curso, recurso_pago_nome) ON DELETE CASCADE,
+  CONSTRAINT ak_questao UNIQUE (
+    atividade_pratica_curso,
+    atividade_pratica_nome,
+    nro
+  ),
   CONSTRAINT alternativa_correta_formato CHECK (alt_correta ~ '^[a-d]$')
 );
 

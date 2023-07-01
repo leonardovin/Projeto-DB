@@ -1,4 +1,4 @@
--- esse script foi desenvolvida para melhorar os resultados das consultas de media-alta complexidade
+-- esse script foi desenvolvid para melhorar os resultados das consultas de media-alta complexidade
 INSERT INTO
   usuario
 VALUES
